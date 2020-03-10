@@ -25,3 +25,9 @@ Run `npx cypress run --browser chrome` to execute the end-to-end tests via [Cypr
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+
+## Build new documentation
+
+Run `npx @compodoc/compodoc` to execute the process that creates automatically the documentation tests via [Cypress](https://compodoc.app/guides/).
+
+
