@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { GithubApiService } from 'src/app/services/github/github-api.service';
 
 @Component({
   selector: 'app-home',
@@ -7,9 +8,19 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
 
-  constructor() { }
+  constructor(public githubApiService: GithubApiService) { }
 
   ngOnInit() {
+    console.log('teste');
+
+    this.githubApiService.consultarCommits('abc').subscribe((data) => {
+        console.log('data');
+        console.log(data);
+      },
+      (error) => {
+        console.log('error');
+        console.log(error);
+      });
   }
 
 }
