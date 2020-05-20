@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { GithubApiService } from 'src/app/services/github/github-api.service';
 import { PageSpeedApiService } from 'src/app/services/pagespeed/pagespeed-api.service';
+import { PageSpeed } from 'src/app/classes/pagespeed';
 
 @Component({
   selector: 'app-home',
@@ -29,8 +30,16 @@ export class HomeComponent implements OnInit {
     console.log('requisicaoPageSpeed');
 
     this.pageSpeedApiService.consultarMetricas('https://open.spotify.com/').subscribe((data) => {
-      console.log('consultarMetricas');
-      console.log(data);
+
+    const pagespeed: PageSpeed = {
+        firstInput: data.loadingExperience.metrics.FIRST_INPUT_DELAY_MS.category,
+        firstPaint: data.loadingExperience.metrics.FIRST_CONTENTFUL_PAINT_MS.category,
+        firstInputOrigin: data.originLoadingExperience.metrics.FIRST_INPUT_DELAY_MS.category,
+        firstPaintOrigin: data.originLoadingExperience.metrics.FIRST_CONTENTFUL_PAINT_MS.category
+      };
+
+      console.log('pagespeed');
+      console.log(pagespeed);
     },
     (error) => {
       console.log('error');
