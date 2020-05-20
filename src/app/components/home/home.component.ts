@@ -13,14 +13,68 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     console.log('teste');
 
-    this.githubApiService.consultarCommits('abc').subscribe((data) => {
-        console.log('data');
-        console.log(data);
-      },
-      (error) => {
-        console.log('error');
-        console.log(error);
-      });
+    this.githubApiService.consultarCommits('jhemesonmotta/ferramenta-produtividade-front').subscribe((data) => {
+      console.log('consultarCommits');
+      console.log(data);
+    },
+    (error) => {
+      console.log('error');
+      console.log(error);
+    });
+
+    this.githubApiService.consultarBranches('jhemesonmotta/ferramenta-produtividade-front').subscribe((data) => {
+      console.log('consultarBranches');
+      console.log(data);
+    },
+    (error) => {
+      console.log('error');
+      console.log(error);
+    });
+
+    this.githubApiService.consultarForks('jhemesonmotta/analisadorLexicoSintatico').subscribe((data) => {
+      console.log('consultarForks');
+      console.log(data);
+    },
+    (error) => {
+      console.log('error');
+      console.log(error);
+    });
+
+    this.githubApiService.consultarReleases('jhemesonmotta/ferramenta-produtividade-front').subscribe((data) => {
+      console.log('consultarReleases');
+      console.log(data);
+    },
+    (error) => {
+      console.log('error');
+      console.log(error);
+    });
+
+    this.githubApiService.consultarContribuintes('jhemesonmotta/analisadorLexicoSintatico').subscribe((data) => {
+      console.log('consultarContribuintes');
+      console.log(data);
+    },
+    (error) => {
+      console.log('error');
+      console.log(error);
+    });
+
+    this.githubApiService.consultarAtividadesDeCommitUltimoAno('jhemesonmotta/ferramenta-produtividade-front').subscribe((data) => {
+      console.log('consultarAtividadesDeCommitUltimoAno');
+      console.log(data);
+    },
+    (error) => {
+      console.log('error');
+      console.log(error);
+    });
+
+    this.githubApiService.consultarAdicoesDelecoes('jhemesonmotta/ferramenta-produtividade-front').subscribe((data) => {
+      console.log('consultarAdicoesDelecoes');
+      console.log(data);
+    },
+    (error) => {
+      console.log('error');
+      console.log(error);
+    });
   }
 
 }
