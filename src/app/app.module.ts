@@ -1,12 +1,12 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
 import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
 import { PaginaNaoEncontradaComponent } from './components/pagina-nao-encontrada/pagina-nao-encontrada.component';
 import { routes } from './app.routes';
 import { GithubApiService } from './services/github/github-api.service';
 import { HttpClientModule } from '@angular/common/http';
+import { PageSpeedApiService } from './services/pagespeed/pagespeed-api.service';
 
 @NgModule({
   declarations: [
@@ -21,6 +21,7 @@ import { HttpClientModule } from '@angular/common/http';
   ],
   providers: [
     GithubApiService,
+    PageSpeedApiService
   ],
   bootstrap: [AppComponent]
 })

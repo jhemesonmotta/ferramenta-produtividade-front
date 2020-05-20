@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { GithubApiService } from 'src/app/services/github/github-api.service';
-// import { lighthouseCheck } from '@foo-software/lighthouse-check';
+import { PageSpeedApiService } from 'src/app/services/pagespeed/pagespeed-api.service';
 
 @Component({
   selector: 'app-home',
@@ -9,13 +9,36 @@ import { GithubApiService } from 'src/app/services/github/github-api.service';
 })
 export class HomeComponent implements OnInit {
 
-  constructor(public githubApiService: GithubApiService) { }
+  constructor(public githubApiService: GithubApiService,
+              public pageSpeedApiService: PageSpeedApiService) { }
 
   ngOnInit() {
     console.log('teste');
 
-    // this.carregarAuditoria();
+    this.requisicaoPageSpeed();
+    // this.requisicoesGithub();
 
+    // TODO: fazer authentication na github API
+
+    // ADD inferência de gênero
+
+    // ADD lib de métricas
+  }
+
+  requisicaoPageSpeed() {
+    console.log('requisicaoPageSpeed');
+
+    this.pageSpeedApiService.consultarMetricas('https://open.spotify.com/').subscribe((data) => {
+      console.log('consultarMetricas');
+      console.log(data);
+    },
+    (error) => {
+      console.log('error');
+      console.log(error);
+    });
+  }
+
+  requisicoesGithub() {
     this.githubApiService.consultarCommits('jhemesonmotta/ferramenta-produtividade-front').subscribe((data) => {
       console.log('consultarCommits');
       console.log(data);
@@ -87,26 +110,5 @@ export class HomeComponent implements OnInit {
       console.log('error');
       console.log(error);
     });
-
-    // TODO: fazer authentication na github API
-
-    // ADD inferência de gênero
-
-    // ADD lib de métricas
   }
-
-  // carregarAuditoria(){
-  //   console.log('aqui 1');
-  //   (async () => {
-  //     const response = await lighthouseCheck({
-  //       urls: [
-  //         'https://www.foo.software',
-  //         'https://www.foo.software/contact'
-  //       ]
-  //     });
-
-  //     console.log('aqui 2');
-  //     console.log('response', response);
-  //   })();
-  // }
 }
