@@ -22,10 +22,10 @@
     "@angular/platform-browser": "^6.1.0",
     "@angular/platform-browser-dynamic": "^6.1.0",
     "@angular/router": "^6.1.0",
+    "@foo-software/lighthouse-check": "0.0.87",
     "core-js": "^2.5.4",
     "cypress": "^4.1.0",
     "github-api": "^3.3.0",
-    "lighthouse": "^6.0.0",
     "rxjs": "^6.2.2",
     "zone.js": "~0.8.26"
   },

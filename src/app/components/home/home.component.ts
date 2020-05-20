@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { GithubApiService } from 'src/app/services/github/github-api.service';
+// import { lighthouseCheck } from '@foo-software/lighthouse-check';
 
 @Component({
   selector: 'app-home',
@@ -12,6 +13,8 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     console.log('teste');
+
+    // this.carregarAuditoria();
 
     this.githubApiService.consultarCommits('jhemesonmotta/ferramenta-produtividade-front').subscribe((data) => {
       console.log('consultarCommits');
@@ -84,5 +87,26 @@ export class HomeComponent implements OnInit {
       console.log('error');
       console.log(error);
     });
+
+    // TODO: fazer authentication na github API
+
+    // ADD inferência de gênero
+
+    // ADD lib de métricas
   }
+
+  // carregarAuditoria(){
+  //   console.log('aqui 1');
+  //   (async () => {
+  //     const response = await lighthouseCheck({
+  //       urls: [
+  //         'https://www.foo.software',
+  //         'https://www.foo.software/contact'
+  //       ]
+  //     });
+
+  //     console.log('aqui 2');
+  //     console.log('response', response);
+  //   })();
+  // }
 }
