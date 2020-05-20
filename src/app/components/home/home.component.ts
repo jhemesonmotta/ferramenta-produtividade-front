@@ -75,6 +75,14 @@ export class HomeComponent implements OnInit {
       console.log('error');
       console.log(error);
     });
-  }
 
+    this.githubApiService.consultarParticipacaoExternaEDoDono('jhemesonmotta/ferramenta-produtividade-front').subscribe((data) => {
+      console.log('consultarParticipacaoExternaEDoDono');
+      console.log(data);
+    },
+    (error) => {
+      console.log('error');
+      console.log(error);
+    });
+  }
 }

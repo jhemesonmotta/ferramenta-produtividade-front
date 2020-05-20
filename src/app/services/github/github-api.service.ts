@@ -37,4 +37,8 @@ export class GithubApiService {
     return this.http.get(`${this.baseUrl}repos/${projeto}/stats/code_frequency`) as Observable<any>;
   }
 
+  consultarParticipacaoExternaEDoDono(projeto: string): Observable<any> {
+    return this.http.get(`${this.baseUrl}repos/${projeto}/stats/participation`) as Observable<any>;
+  }
+
 }
