@@ -16,8 +16,8 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     console.log('teste');
 
-    this.requisicaoPageSpeed();
-    // this.requisicoesGithub();
+    // this.requisicaoPageSpeed();
+    this.requisicoesGithub();
 
     // TODO: fazer authentication na github API
 
