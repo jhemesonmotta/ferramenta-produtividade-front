@@ -4,12 +4,13 @@ import { Observable } from 'rxjs';
 
 @Injectable()
 export class PageSpeedApiService {
-
+  private categorias = 'category=ACCESSIBILITY&category=BEST_PRACTICES&category=PERFORMANCE&category=PWA&category=SEO&';
+  private myKey = 'AIzaSyARJvYUi12SEv-Tju4bGg_F_WNklnd1hU4';
   private baseUrl = 'https://www.googleapis.com/pagespeedonline/v5/runPagespeed';
 
   constructor(private http: HttpClient) {}
 
   consultarMetricas(url: string): Observable<any> {
-      return this.http.get(`${this.baseUrl}?url=${url}`) as Observable<any>;
+      return this.http.get(`${this.baseUrl}?${this.categorias}url=${url}&key=${this.myKey}`) as Observable<any>;
   }
 }

@@ -16,8 +16,8 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     console.log('teste');
 
-    // this.requisicaoPageSpeed();
-    this.requisicoesGithub();
+    this.requisicaoPageSpeed();
+    // this.requisicoesGithub();
 
     // TODO: fazer authentication na github API
 
@@ -30,6 +30,11 @@ export class HomeComponent implements OnInit {
     console.log('requisicaoPageSpeed');
 
     this.pageSpeedApiService.consultarMetricas('https://open.spotify.com/').subscribe((data) => {
+    console.log('data.lighthouseResult');
+    console.log(data.lighthouseResult);
+
+    // lighthouseResult qualidade Auditorias = média dos scores da lista de "audit";
+    // lighthouseResult qualidade categorias = scores das categorias
 
     const pagespeed: PageSpeed = {
         firstInput: data.loadingExperience.metrics.FIRST_INPUT_DELAY_MS.category,
