@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { GithubApiService } from 'src/app/services/github/github-api.service';
 import { PageSpeedApiService } from 'src/app/services/pagespeed/pagespeed-api.service';
 import { PageSpeed } from 'src/app/classes/pagespeed';
+import { GenderizeApiService } from 'src/app/services/genderize/genderize-api.service';
 
 @Component({
   selector: 'app-home',
@@ -11,12 +12,15 @@ import { PageSpeed } from 'src/app/classes/pagespeed';
 export class HomeComponent implements OnInit {
 
   constructor(public githubApiService: GithubApiService,
-              public pageSpeedApiService: PageSpeedApiService) { }
+              public pageSpeedApiService: PageSpeedApiService,
+              public genderizeApiService: GenderizeApiService) { }
 
   ngOnInit() {
     console.log('teste');
 
-    this.requisicaoPageSpeed();
+    this.requisicaoGenderize();
+
+    // this.requisicaoPageSpeed();
     // this.requisicoesGithub();
 
     // TODO: fazer authentication na github API
@@ -118,6 +122,17 @@ export class HomeComponent implements OnInit {
 
     this.githubApiService.consultarParticipacaoExternaEDoDono('jhemesonmotta/ferramenta-produtividade-front').subscribe((data) => {
       console.log('consultarParticipacaoExternaEDoDono');
+      console.log(data);
+    },
+    (error) => {
+      console.log('error');
+      console.log(error);
+    });
+  }
+
+  requisicaoGenderize() {
+    this.genderizeApiService.consultarGenero('Jhonatan Silva Mota').subscribe((data) => {
+      console.log('consultarGenero');
       console.log(data);
     },
     (error) => {
