@@ -47,4 +47,9 @@ export class GithubApiService {
     return this.http.get(`${this.baseUrl}repos/${projeto}/stats/participation`) as Observable<GhRepoParticipacaoExterna>;
   }
 
+  consultarRepositorios(linguagem: string, pagina: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}search/repositories?q=stars:%3E3+language:${linguagem}&sort=stars&order=desc&page=${pagina}`
+    ) as Observable<any>;
+  }
+
 }

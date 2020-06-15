@@ -8,12 +8,14 @@ import { GithubApiService } from './services/github/github-api.service';
 import { HttpClientModule } from '@angular/common/http';
 import { PageSpeedApiService } from './services/pagespeed/pagespeed-api.service';
 import { GenderizeApiService } from './services/genderize/genderize-api.service';
+import { TopProjetosComponent } from './components/top-projetos/top-projetos.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    PaginaNaoEncontradaComponent
+    PaginaNaoEncontradaComponent,
+    TopProjetosComponent
   ],
   imports: [
     BrowserModule,

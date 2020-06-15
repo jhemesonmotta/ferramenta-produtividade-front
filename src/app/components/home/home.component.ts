@@ -10,7 +10,6 @@ import { GenderizeApiService } from 'src/app/services/genderize/genderize-api.se
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-
   constructor(public githubApiService: GithubApiService,
               public pageSpeedApiService: PageSpeedApiService,
               public genderizeApiService: GenderizeApiService) { }
@@ -18,7 +17,7 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     console.log('teste');
 
-    this.requisicaoGenderize();
+    // this.requisicaoGenderize();
 
     // this.requisicaoPageSpeed();
     // this.requisicoesGithub();
