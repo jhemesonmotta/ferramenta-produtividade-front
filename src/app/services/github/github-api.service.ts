@@ -48,8 +48,16 @@ export class GithubApiService {
   }
 
   consultarRepositorios(linguagem: string, pagina: number): Observable<any> {
+    this.wait(15000);
     return this.http.get(`${this.baseUrl}search/repositories?q=stars:%3E3+language:${linguagem}&sort=stars&order=desc&page=${pagina}`
     ) as Observable<any>;
   }
 
+  private wait(ms) {
+    const start = new Date().getTime();
+    let end = start;
+    while (end < start + ms) {
+      end = new Date().getTime();
+   }
+ }
 }

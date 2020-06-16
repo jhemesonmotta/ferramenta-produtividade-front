@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { GithubApiService } from 'src/app/services/github/github-api.service';
+import { SharedService } from 'src/app/services/shared.service';
 
 @Component({
   selector: 'app-top-projetos',
@@ -7,41 +8,57 @@ import { GithubApiService } from 'src/app/services/github/github-api.service';
   styleUrls: ['./top-projetos.component.css']
 })
 export class TopProjetosComponent implements OnInit {
+  private retornarReposPromise: Promise<void>;
+
   // motivo: as 15 mais utilizadas de 2020 até agora
   // fonte: https://madnight.github.io/githut/#/pull_requests/2020/1
-  listaDeLinguagens = ['JavaScript',
-                          'Python',
-                          'Java',
-                          'Go',
+
+  listaDeLinguagens = ['javascript',
+                          'python',
+                          'java',
+                          'go',
                           'cpp',
-                          'Ruby',
-                          'TypeScript',
-                          'PHP',
+                          'ruby',
+                          'typescript',
+                          'php',
                           'csharp',
                           'C',
-                          'Scala',
-                          'Shell',
-                          'Rust',
-                          'Swift',
-                          'Kotlin'];
+                          'scala',
+                          'shell',
+                          'rust',
+                          'swift',
+                          'kotlin'];
 
-  constructor(public githubApiService: GithubApiService) { }
+  // listaDeLinguagens = ['JavaScript', 'cobol'];
+
+  listaRetorno: Array<string> = [];
+
+  constructor(public githubApiService: GithubApiService,
+    public sharedService: SharedService) { }
 
   ngOnInit() {
-    this.consultarRepositorios('Java');
+    if (!this.sharedService.recuperaListaRetorno()) {
+      this.listaDeLinguagens.forEach(linguagem => {
+        this.consultarRepositorios(linguagem).then(() => {
+          this.sharedService.guardaListaRetorno(this.listaRetorno);
+          console.log('this.sharedService.recuperaListaRetorno()');
+          console.log(this.sharedService.recuperaListaRetorno());
+        });
+      });
+    }
   }
 
   consultarRepositorios(linguagem: string) {
-    // OBS.: a API só traz 30 itens por página. Para buscar 100, teremos que fazer 4 requisições
-
-    this.githubApiService.consultarRepositorios(linguagem, 2).subscribe((data) => {
-      console.log('consultarRepositorios');
-      console.log(data);
-    },
-    (error) => {
+    this.retornarReposPromise = this.githubApiService.consultarRepositorios(linguagem, 1)
+    .toPromise()
+    .then((data) => {
+      Array.prototype.push.apply(this.listaRetorno, data.items.map(repositorio => repositorio.full_name));
+    }, (error) => {
       console.log('error');
       console.log(error);
     });
+
+    return this.retornarReposPromise;
 
     // Próximos passos
       // 1 - fazer pegar os 100 primeiros de uma linguagem qualquer e add numa lista (apenas url)

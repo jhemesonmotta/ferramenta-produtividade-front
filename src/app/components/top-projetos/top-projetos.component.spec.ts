@@ -3,6 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { TopProjetosComponent } from './top-projetos.component';
 import { GithubApiService } from 'src/app/services/github/github-api.service';
 import { HttpClientModule } from '@angular/common/http';
+import { SharedService } from 'src/app/services/shared.service';
 
 describe('TopProjetosComponent', () => {
   let component: TopProjetosComponent;
@@ -12,7 +13,7 @@ describe('TopProjetosComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ TopProjetosComponent ],
       imports: [ HttpClientModule ],
-      providers: [ GithubApiService ]
+      providers: [ GithubApiService, SharedService ]
     })
     .compileComponents();
   }));
