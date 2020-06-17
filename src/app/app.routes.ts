@@ -3,6 +3,7 @@ import {HomeComponent} from './components/home/home.component';
 import {ModuleWithProviders} from '@angular/core';
 import { PaginaNaoEncontradaComponent } from './components/pagina-nao-encontrada/pagina-nao-encontrada.component';
 import { TopProjetosComponent } from './components/top-projetos/top-projetos.component';
+import { RodarScrappersComponent } from './components/rodar-scrappers/rodar-scrappers.component';
 
 export const ROUTES: Routes = [
   {
@@ -12,6 +13,10 @@ export const ROUTES: Routes = [
   {
     path: 'top-projetos',
     component: TopProjetosComponent
+  },
+  {
+    path: 'rodar-scrappers',
+    component: RodarScrappersComponent
   },
   {
     path: '**',

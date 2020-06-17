@@ -57,7 +57,7 @@ export class GithubApiService {
 
   consultarRepositorios(linguagem: string, pagina: number): Observable<any> {
     this.wait(7000);
-    return this.http.get(`${this.baseUrl}search/repositories?q=stars:%3E3+language:${linguagem}&sort=stars&order=desc&page=${pagina}`
+    return this.http.get(`${this.baseUrl}search/repositories?q=stars:%3E5+language:${linguagem}&sort=stars&order=desc&page=${pagina}`
     ) as Observable<any>;
   }
 

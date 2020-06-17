@@ -1,4 +1,5 @@
 import {Injectable} from '@angular/core';
+import { ProjectEvaluation } from '../classes/project.evaluation';
 
 @Injectable()
 export class SharedService {
@@ -9,11 +10,11 @@ export class SharedService {
     return SharedService.instance = SharedService.instance || this;
   }
 
-  guardaListaRetorno(listaRetorno: string[]): void {
-    localStorage.setItem('listaRetorno', JSON.stringify({listaRetorno: listaRetorno}));
+  guardaListaProjetos(listaProjetos: ProjectEvaluation[]): void {
+    localStorage.setItem('listaProjetos', JSON.stringify({listaProjetos: listaProjetos}));
   }
 
-  recuperaListaRetorno(): any {
-    return JSON.parse(localStorage.getItem('listaRetorno'));
+  recuperaListaProjetos(): {listaProjetos: ProjectEvaluation[]} {
+    return JSON.parse(localStorage.getItem('listaProjetos'));
   }
 }
