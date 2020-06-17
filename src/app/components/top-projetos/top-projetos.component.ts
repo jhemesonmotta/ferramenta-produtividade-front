@@ -37,7 +37,7 @@ export class TopProjetosComponent implements OnInit {
     public sharedService: SharedService) { }
 
   ngOnInit() {
-    if (!this.sharedService.recuperaListaRetorno()) {
+    // if (!this.sharedService.recuperaListaRetorno()) {
       this.listaDeLinguagens.forEach(linguagem => {
         this.consultarRepositorios(linguagem).then(() => {
           this.sharedService.guardaListaRetorno(this.listaRetorno);
@@ -45,7 +45,7 @@ export class TopProjetosComponent implements OnInit {
           console.log(this.sharedService.recuperaListaRetorno());
         });
       });
-    }
+    // }
   }
 
   consultarRepositorios(linguagem: string) {
