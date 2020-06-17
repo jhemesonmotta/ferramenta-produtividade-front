@@ -67,20 +67,18 @@ export class RodarScrappersComponent implements OnInit {
     // média de alguns avaliadores do pagespeed
     // executar apenas se tiver homepage
 
-    // this.listaProjetos.forEach(projeto => {
+    this.listaProjetos.forEach(projeto => {
 
-      // if (projeto.homePage != null && projeto.homePage != '') {
-        // this.consultarMetricas(projeto.homePage).then(() => {
-        this.consultarMetricas('http://vuejs.org').then(() => {
-          console.log('to no then');
-          console.log('this.listaProjetos');
-          console.log(this.listaProjetos);
-          // this.sharedService.guardaListaProjetos(this.listaRetorno);
-          // console.log('this.sharedService.recuperaListaProjetos()');
-          // console.log(this.sharedService.recuperaListaProjetos());
+      if (projeto.homePage != null && projeto.homePage !== '') {
+        this.consultarMetricas(projeto.homePage).then(() => {
+          this.sharedService.guardaListaProjetos(this.listaProjetos);
+          console.log('this.sharedService.recuperaListaProjetos()');
+          console.log(this.sharedService.recuperaListaProjetos());
         });
-      // }
-    // });
+
+        console.log('acabou');
+      }
+    });
   }
 
   calcularFrequenciaCommitsProjeto() {

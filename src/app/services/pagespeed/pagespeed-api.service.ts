@@ -11,6 +11,15 @@ export class PageSpeedApiService {
   constructor(private http: HttpClient) {}
 
   consultarMetricas(url: string): Observable<any> {
-      return this.http.get(`${this.baseUrl}?${this.categorias}url=${url}&key=${this.myKey}`) as Observable<any>;
+    this.wait(500);
+    return this.http.get(`${this.baseUrl}?${this.categorias}url=${url}&key=${this.myKey}`) as Observable<any>;
   }
+
+  private wait(ms) {
+    const start = new Date().getTime();
+    let end = start;
+    while (end < start + ms) {
+      end = new Date().getTime();
+   }
+ }
 }
