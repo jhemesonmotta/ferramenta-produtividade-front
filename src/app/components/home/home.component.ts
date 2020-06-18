@@ -16,17 +16,21 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     console.log('teste');
+    // this.teste();
 
     // this.requisicaoGenderize();
 
     // this.requisicaoPageSpeed();
     // this.requisicoesGithub();
 
-    // TODO: fazer authentication na github API
-
-    // ADD inferência de gênero
-
-    // ADD lib de métricas
+    this.githubApiService.consultarCommits('jhemesonmotta/safira-web-project').subscribe((data) => {
+      console.log('consultarCommits');
+      console.log(data);
+    },
+    (error) => {
+      console.log('error');
+      console.log(error);
+    });
   }
 
   requisicaoPageSpeed() {
@@ -35,9 +39,6 @@ export class HomeComponent implements OnInit {
     this.pageSpeedApiService.consultarMetricas('https://open.spotify.com/').subscribe((data) => {
     console.log('data.lighthouseResult');
     console.log(data.lighthouseResult);
-
-    // lighthouseResult qualidade Auditorias = média dos scores da lista de "audit";
-    // lighthouseResult qualidade categorias = scores das categorias
 
     const pagespeed: PageSpeed = {
         firstInput: data.loadingExperience.metrics.FIRST_INPUT_DELAY_MS.category,
@@ -56,15 +57,6 @@ export class HomeComponent implements OnInit {
   }
 
   requisicoesGithub() {
-    this.githubApiService.consultarCommits('jhemesonmotta/ferramenta-produtividade-front').subscribe((data) => {
-      console.log('consultarCommits');
-      console.log(data);
-    },
-    (error) => {
-      console.log('error');
-      console.log(error);
-    });
-
     this.githubApiService.consultarBranches('jhemesonmotta/ferramenta-produtividade-front').subscribe((data) => {
       console.log('consultarBranches');
       console.log(data);

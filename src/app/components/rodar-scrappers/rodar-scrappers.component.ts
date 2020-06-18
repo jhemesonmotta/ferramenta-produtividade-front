@@ -82,13 +82,9 @@ export class RodarScrappersComponent implements OnInit {
 
   calcularFrequenciaCommitsProjeto() {
     // frequencia = quantidade total de commits no último ano / 365
-
     console.log('calcularFrequenciaCommitsProjeto()');
 
     this.listaProjetos.forEach(projeto => {
-      console.log('projeto');
-      console.log(projeto);
-
       this.consultarCommits(projeto.nome).then(() => {
         this.sharedService.guardaListaProjetos(this.listaProjetos);
         console.log('this.sharedService.recuperaListaProjetos()');
