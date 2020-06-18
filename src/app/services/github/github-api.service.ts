@@ -40,9 +40,9 @@ export class GithubApiService {
     return this.http.get(`${this.baseUrl}repos/${projeto}/stats/contributors`) as Observable<Array<GhRepoContribuinte>>;
   }
 
-  consultarAtividadesDeCommitUltimoAno(projeto: string): Observable<GhRepoAtividadeUltimoAno> {
+  consultarAtividadesDeCommitUltimoAno(projeto: string): Observable<Array<GhRepoAtividadeUltimoAno>> {
     this.wait(2000);
-    return this.http.get(`${this.baseUrl}repos/${projeto}/stats/commit_activity`) as Observable<GhRepoAtividadeUltimoAno>;
+    return this.http.get(`${this.baseUrl}repos/${projeto}/stats/commit_activity`) as Observable<Array<GhRepoAtividadeUltimoAno>>;
   }
 
   consultarAdicoesDelecoes(projeto: string): Observable<Array<any>> {

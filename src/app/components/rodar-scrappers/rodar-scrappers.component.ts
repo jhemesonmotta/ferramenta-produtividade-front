@@ -3,6 +3,7 @@ import { GithubApiService } from 'src/app/services/github/github-api.service';
 import { SharedService } from 'src/app/services/shared.service';
 import { ProjectEvaluation } from 'src/app/classes/project.evaluation';
 import { PageSpeedApiService } from 'src/app/services/pagespeed/pagespeed-api.service';
+import { GhRepoAtividadeUltimoAno } from 'src/app/classes/gh-atividade-ultimo-ano';
 
 @Component({
   selector: 'app-rodar-scrappers',
@@ -38,6 +39,7 @@ export class RodarScrappersComponent implements OnInit {
   // Variáveis privadas
   private retornarReposPromise: Promise<void>;
   private consultarMetricasPromise: Promise<void>;
+  private consultarCommitsPromise: Promise<void>;
 
   constructor(public githubApiService: GithubApiService,
     public sharedService: SharedService,
@@ -64,9 +66,6 @@ export class RodarScrappersComponent implements OnInit {
 
   calcularQualidade() {
     console.log('calcularQualidade()');
-    // média de alguns avaliadores do pagespeed
-    // executar apenas se tiver homepage
-
     this.listaProjetos.forEach(projeto => {
 
       if (projeto.homePage != null && projeto.homePage !== '') {
@@ -84,13 +83,17 @@ export class RodarScrappersComponent implements OnInit {
   calcularFrequenciaCommitsProjeto() {
     // frequencia = quantidade total de commits no último ano / 365
 
-    this.listaProjetos.forEach(projeto => {
+    console.log('calcularFrequenciaCommitsProjeto()');
 
-      // this.consultarRepositorios(projeto).then(() => {
-      //   this.sharedService.guardaListaProjetos(this.listaRetorno);
-      //   console.log('this.sharedService.recuperaListaProjetos()');
-      //   console.log(this.sharedService.recuperaListaProjetos());
-      // });
+    this.listaProjetos.forEach(projeto => {
+      console.log('projeto');
+      console.log(projeto);
+
+      this.consultarCommits(projeto.nome).then(() => {
+        this.sharedService.guardaListaProjetos(this.listaProjetos);
+        console.log('this.sharedService.recuperaListaProjetos()');
+        console.log(this.sharedService.recuperaListaProjetos());
+      });
 
     });
   }
@@ -101,7 +104,7 @@ export class RodarScrappersComponent implements OnInit {
     this.listaProjetos.forEach(projeto => {
 
       // this.consultarRepositorios(linguagem).then(() => {
-      //   this.sharedService.guardaListaProjetos(this.listaRetorno);
+      //   this.sharedService.guardaListaProjetos(this.listaProjetos);
       //   console.log('this.sharedService.recuperaListaProjetos()');
       //   console.log(this.sharedService.recuperaListaProjetos());
       // });
@@ -117,7 +120,7 @@ export class RodarScrappersComponent implements OnInit {
     this.listaProjetos.forEach(projeto => {
 
       // this.consultarRepositorios(linguagem).then(() => {
-      //   this.sharedService.guardaListaProjetos(this.listaRetorno);
+      //   this.sharedService.guardaListaProjetos(this.listaProjetos);
       //   console.log('this.sharedService.recuperaListaProjetos()');
       //   console.log(this.sharedService.recuperaListaProjetos());
       // });
@@ -131,7 +134,7 @@ export class RodarScrappersComponent implements OnInit {
     this.listaProjetos.forEach(projeto => {
 
       // this.consultarRepositorios(linguagem).then(() => {
-      //   this.sharedService.guardaListaProjetos(this.listaRetorno);
+      //   this.sharedService.guardaListaProjetos(this.listaProjetos);
       //   console.log('this.sharedService.recuperaListaProjetos()');
       //   console.log(this.sharedService.recuperaListaProjetos());
       // });
@@ -198,5 +201,30 @@ export class RodarScrappersComponent implements OnInit {
     });
 
     return this.consultarMetricasPromise;
+  }
+
+  private consultarCommits(projeto: string) {
+    this.consultarCommitsPromise = this.githubApiService.consultarAtividadesDeCommitUltimoAno(projeto)
+    .toPromise()
+    .then((listaCommitsRetorno: Array<GhRepoAtividadeUltimoAno>) => {
+
+      console.log('consultarCommits');
+      let frequenciaCommits = 0;
+
+      listaCommitsRetorno.forEach(item => {
+        frequenciaCommits = frequenciaCommits + item.total;
+      });
+
+      if (frequenciaCommits > 0) {
+        frequenciaCommits = frequenciaCommits / 365;
+        this.listaProjetos.filter(p => p.nome === projeto)[0].frequenciaCommits = frequenciaCommits;
+      }
+    },
+    (error) => {
+      console.log('error');
+      console.log(error);
+    });
+
+    return this.consultarCommitsPromise;
   }
 }
