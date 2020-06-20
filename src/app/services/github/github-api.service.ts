@@ -15,6 +15,11 @@ export class GithubApiService {
 
   constructor(private http: HttpClient) {}
 
+  consultarBaseRepo(projeto: string): Observable<any> {
+    this.wait(2000);
+    return this.http.get(`${GITHUB_BASE_URL}repos/${projeto}`) as Observable<any>;
+  }
+
   consultarCommits(projeto: string): Observable<Array<GhRepoCommit>> {
     this.wait(2000);
     return this.http.get(`${GITHUB_BASE_URL}repos/${projeto}/commits`) as Observable<Array<GhRepoCommit>>;

@@ -23,14 +23,14 @@ export class HomeComponent implements OnInit {
     // this.requisicaoPageSpeed();
     // this.requisicoesGithub();
 
-    this.githubApiService.consultarCommits('jhemesonmotta/safira-web-project').subscribe((data) => {
-      console.log('consultarCommits');
-      console.log(data);
-    },
-    (error) => {
-      console.log('error');
-      console.log(error);
-    });
+    // this.githubApiService.consultarCommits('jhemesonmotta/safira-web-project').subscribe((data) => {
+    //   console.log('consultarCommits');
+    //   console.log(data);
+    // },
+    // (error) => {
+    //   console.log('error');
+    //   console.log(error);
+    // });
   }
 
   requisicaoPageSpeed() {

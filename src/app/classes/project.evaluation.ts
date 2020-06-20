@@ -3,7 +3,7 @@ export interface ProjectEvaluation {
     homePage: string;
     qualidade: PageSpeedQualidade;
     frequenciaCommits: number;
-    baseDevs: number;
+    tamanhoComunidade: number;
     diversidade: number;
     tamanho: number;
 }

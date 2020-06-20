@@ -40,6 +40,7 @@ export class RodarScrappersComponent implements OnInit {
   private retornarReposPromise: Promise<void>;
   private consultarMetricasPromise: Promise<void>;
   private consultarCommitsPromise: Promise<void>;
+  private consultarBaseRepoPromise: Promise<void>;
 
   constructor(public githubApiService: GithubApiService,
     public sharedService: SharedService,
@@ -95,16 +96,15 @@ export class RodarScrappersComponent implements OnInit {
   }
 
   calcularBaseDesenvolvedores() {
-    // quantidade total de devs
+    // (stargazers + watchers) / 2
+    console.log('calcularBaseDesenvolvedores()');
 
     this.listaProjetos.forEach(projeto => {
-
-      // this.consultarRepositorios(linguagem).then(() => {
-      //   this.sharedService.guardaListaProjetos(this.listaProjetos);
-      //   console.log('this.sharedService.recuperaListaProjetos()');
-      //   console.log(this.sharedService.recuperaListaProjetos());
-      // });
-
+      this.consultarTamanhoComunidade(projeto.nome).then(() => {
+        this.sharedService.guardaListaProjetos(this.listaProjetos);
+        console.log('this.sharedService.recuperaListaProjetos()');
+        console.log(this.sharedService.recuperaListaProjetos());
+      });
     });
   }
 
@@ -157,7 +157,7 @@ export class RodarScrappersComponent implements OnInit {
             seo: 0,
             total: 0
           },
-          baseDevs: 0,
+          tamanhoComunidade: 0,
           diversidade: 0,
           frequenciaCommits: 0
         });
@@ -204,7 +204,6 @@ export class RodarScrappersComponent implements OnInit {
     .toPromise()
     .then((listaCommitsRetorno: Array<GhRepoAtividadeUltimoAno>) => {
 
-      console.log('consultarCommits');
       let frequenciaCommits = 0;
 
       listaCommitsRetorno.forEach(item => {
@@ -222,5 +221,25 @@ export class RodarScrappersComponent implements OnInit {
     });
 
     return this.consultarCommitsPromise;
+  }
+
+  private consultarTamanhoComunidade(projeto: string) {
+
+    this.consultarBaseRepoPromise = this.githubApiService
+    .consultarBaseRepo(projeto)
+    .toPromise()
+    .then((data) => {
+      console.log('consultarBaseRepo');
+
+      // tamanho da comunidade = (stargazers + watchers) / 2
+      const tamanhoComunidade = (Number(data.stargazers_count) + Number(data.watchers_count)) / 2;
+      this.listaProjetos.filter(p => p.nome === projeto)[0].tamanhoComunidade = tamanhoComunidade;
+    },
+    (error) => {
+      console.log('error');
+      console.log(error);
+    });
+
+    return this.consultarBaseRepoPromise;
   }
 }

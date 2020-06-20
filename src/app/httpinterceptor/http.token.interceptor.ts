@@ -26,7 +26,7 @@ export class HttpTokenInterceptor implements HttpInterceptor {
 
     // const usuarioLogado = this.sharedService.getCurrentLogin();
     if (request.url.startsWith(GITHUB_BASE_URL)) {
-      headerSettings['Authorization'] = `Token 6564d0642b03961b5ee7b71c4ce966dd233f430a`;
+      headerSettings['Authorization'] = `Token ${atob('MmZjMmViOWFmOTU1NGZlZjQzMDUyYzhjMzNkNjBhZjE1NzZkY2NjZA==')}`;
     }
     headerSettings['Content-Type'] = 'application/json';
     const newHeader = new HttpHeaders(headerSettings);
