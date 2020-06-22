@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { GhRepoCommit } from 'src/app/classes/gh-commit';
 import { GhRepoBranch } from 'src/app/classes/gh-branch';
 import { GhRepoRelease } from 'src/app/classes/gh-releases';
-import { GhRepoContribuinte } from 'src/app/classes/gh-contribuinte';
+import { GhRepoContribuinte, GhContribuinte } from 'src/app/classes/gh-contribuinte';
 import { GhRepoAtividadeUltimoAno } from 'src/app/classes/gh-atividade-ultimo-ano';
 import { GhRepoParticipacaoExterna } from 'src/app/classes/gh-participacao-externa';
 import { GITHUB_BASE_URL } from 'src/app/global/global';
@@ -58,6 +58,11 @@ export class GithubApiService {
   consultarParticipacaoExternaEDoDono(projeto: string): Observable<GhRepoParticipacaoExterna> {
     this.wait(2000);
     return this.http.get(`${GITHUB_BASE_URL}repos/${projeto}/stats/participation`) as Observable<GhRepoParticipacaoExterna>;
+  }
+
+  consultarUsuario(url: string): Observable<GhContribuinte> {
+    this.wait(2000);
+    return this.http.get(url) as Observable<GhContribuinte>;
   }
 
   consultarRepositorios(linguagem: string, pagina: number): Observable<any> {

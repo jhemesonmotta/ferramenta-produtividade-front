@@ -4,6 +4,7 @@ import { SharedService } from 'src/app/services/shared.service';
 import { ProjectEvaluation } from 'src/app/classes/project.evaluation';
 import { PageSpeedApiService } from 'src/app/services/pagespeed/pagespeed-api.service';
 import { GhRepoAtividadeUltimoAno } from 'src/app/classes/gh-atividade-ultimo-ano';
+import { GhRepoContribuinte, GhContribuinte } from 'src/app/classes/gh-contribuinte';
 
 @Component({
   selector: 'app-rodar-scrappers',
@@ -33,14 +34,18 @@ export class RodarScrappersComponent implements OnInit {
   // Variáveis públicas (podem ser exibidas no HTML)
   listaDeLinguagens = ['JavaScript'];
   listaRetorno: Array<ProjectEvaluation> = [];
-
   listaProjetos: Array<ProjectEvaluation> = [];
+  listaContribuintesBusca: Array<GhRepoContribuinte> = [];
+  listaContribuintesCompleta: Array<GhContribuinte> = [];
 
   // Variáveis privadas
   private retornarReposPromise: Promise<void>;
   private consultarMetricasPromise: Promise<void>;
   private consultarCommitsPromise: Promise<void>;
   private consultarBaseRepoPromise: Promise<void>;
+  private consultarDiversidadePromise: Promise<void>;
+  private consultarContribuintesPromise: Promise<void>;
+  private consultarUsuarioPromise: Promise<void>;
 
   constructor(public githubApiService: GithubApiService,
     public sharedService: SharedService,
@@ -109,19 +114,20 @@ export class RodarScrappersComponent implements OnInit {
   }
 
   calcularDiversidadeGenero() {
+    console.log('calcularDiversidadeGenero');
+    // pega os 100 últimos contribuintes
+    // minera o gênero de cada um
+    // faz o calculo de diversidade
+
     // 1 = 50% homens
     // 0 = 100% homens || 100% mulher
     // diversidade = 100 - |pct homens - pct mulheres|
 
-    this.listaProjetos.forEach(projeto => {
+    // this.listaProjetos.forEach(projeto => {
 
-      // this.consultarRepositorios(linguagem).then(() => {
-      //   this.sharedService.guardaListaProjetos(this.listaProjetos);
-      //   console.log('this.sharedService.recuperaListaProjetos()');
-      //   console.log(this.sharedService.recuperaListaProjetos());
-      // });
+      this.calcularDiversidadeDeGenero('jhemesonmotta/analisadorLexicoSintatico');
 
-    });
+    // });
   }
 
   calcularCorrelacaoTamanho() {
@@ -224,7 +230,6 @@ export class RodarScrappersComponent implements OnInit {
   }
 
   private consultarTamanhoComunidade(projeto: string) {
-
     this.consultarBaseRepoPromise = this.githubApiService
     .consultarBaseRepo(projeto)
     .toPromise()
@@ -241,5 +246,58 @@ export class RodarScrappersComponent implements OnInit {
     });
 
     return this.consultarBaseRepoPromise;
+  }
+
+  private calcularDiversidadeDeGenero(projeto: string) {
+    // pega os 100 últimos contribuintes
+    // minera o gênero de cada um
+    // faz o calculo de diversidade
+
+    this.consultarContribuintes(projeto).then(() => {
+      console.log('this.listaContribuintesBusca');
+      console.log(this.listaContribuintesBusca);
+
+      this.listaContribuintesBusca.forEach(contribuinte => {
+        this.consultarUsuario(contribuinte.author.url).then(() => {
+          console.log(this.listaContribuintesCompleta);
+
+          // semântica = acabou?
+
+          if (this.listaContribuintesCompleta.length === this.listaContribuintesBusca.length) {
+            console.log('acabooou');
+          }
+        });
+      });
+    });
+  }
+
+  private consultarContribuintes(projeto: string) {
+    this.consultarContribuintesPromise = this.githubApiService
+    .consultarContribuintes(projeto)
+    .toPromise()
+    .then((data) => {
+      this.listaContribuintesBusca = data;
+    },
+    (error) => {
+      console.log('error');
+      console.log(error);
+    });
+
+    return this.consultarContribuintesPromise;
+  }
+
+  private consultarUsuario(url: string) {
+    this.consultarUsuarioPromise = this.githubApiService
+    .consultarUsuario(url)
+    .toPromise()
+    .then((usuario) => {
+      this.listaContribuintesCompleta.push(usuario);
+    },
+    (error) => {
+      console.log('error');
+      console.log(error);
+    });
+
+    return this.consultarUsuarioPromise;
   }
 }
