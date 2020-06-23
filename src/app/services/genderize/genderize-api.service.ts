@@ -10,7 +10,6 @@ export class GenderizeApiService {
   constructor(private http: HttpClient) {}
 
   consultarGenero(nome: string): Observable<Genderize> {
-      nome = nome.split(' ')[0];
       return this.http.get(`${this.baseUrl}?name=${nome}`) as Observable<Genderize>;
   }
 }

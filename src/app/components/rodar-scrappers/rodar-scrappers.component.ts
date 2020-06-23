@@ -5,6 +5,7 @@ import { ProjectEvaluation } from 'src/app/classes/project.evaluation';
 import { PageSpeedApiService } from 'src/app/services/pagespeed/pagespeed-api.service';
 import { GhRepoAtividadeUltimoAno } from 'src/app/classes/gh-atividade-ultimo-ano';
 import { GhRepoContribuinte, GhContribuinte } from 'src/app/classes/gh-contribuinte';
+import { GenderizeApiService } from 'src/app/services/genderize/genderize-api.service';
 
 @Component({
   selector: 'app-rodar-scrappers',
@@ -43,13 +44,14 @@ export class RodarScrappersComponent implements OnInit {
   private consultarMetricasPromise: Promise<void>;
   private consultarCommitsPromise: Promise<void>;
   private consultarBaseRepoPromise: Promise<void>;
-  private consultarDiversidadePromise: Promise<void>;
   private consultarContribuintesPromise: Promise<void>;
   private consultarUsuarioPromise: Promise<void>;
+  private consultarGeneroPromise: Promise<void>;
 
   constructor(public githubApiService: GithubApiService,
     public sharedService: SharedService,
-    public pageSpeedApiService: PageSpeedApiService) { }
+    public pageSpeedApiService: PageSpeedApiService,
+    public genderizeApiService: GenderizeApiService) { }
 
   ngOnInit() {
     console.log('this.sharedService.recuperaListaProjetos()');
@@ -125,7 +127,7 @@ export class RodarScrappersComponent implements OnInit {
 
     // this.listaProjetos.forEach(projeto => {
 
-      this.calcularDiversidadeDeGenero('jhemesonmotta/analisadorLexicoSintatico');
+      this.calcularDiversidadeDeGenero('freeCodeCamp/freeCodeCamp');
 
     // });
   }
@@ -249,10 +251,6 @@ export class RodarScrappersComponent implements OnInit {
   }
 
   private calcularDiversidadeDeGenero(projeto: string) {
-    // pega os 100 últimos contribuintes
-    // minera o gênero de cada um
-    // faz o calculo de diversidade
-
     this.consultarContribuintes(projeto).then(() => {
       console.log('this.listaContribuintesBusca');
       console.log(this.listaContribuintesBusca);
@@ -262,9 +260,9 @@ export class RodarScrappersComponent implements OnInit {
           console.log(this.listaContribuintesCompleta);
 
           // semântica = acabou?
-
           if (this.listaContribuintesCompleta.length === this.listaContribuintesBusca.length) {
-            console.log('acabooou');
+            console.log('this.buscaGeneroLista()');
+            this.buscaGeneroLista(projeto);
           }
         });
       });
@@ -299,5 +297,57 @@ export class RodarScrappersComponent implements OnInit {
     });
 
     return this.consultarUsuarioPromise;
+  }
+
+  private buscaGenero(nome: string) {
+    this.consultarGeneroPromise = this.genderizeApiService
+    .consultarGenero(nome)
+    .toPromise()
+    .then((genderize) => {
+      console.log('buscaGenero');
+      console.log(genderize);
+
+      this.listaContribuintesCompleta.filter(contrib => contrib.name && contrib.name.includes(nome))[0].gender = genderize.gender;
+    },
+    (error) => {
+      console.log('error');
+      console.log(error);
+    });
+
+    return this.consultarGeneroPromise;
+  }
+
+  private buscaGeneroLista(projeto: string) {
+    let qtdExecucoes = 0;
+
+    this.listaContribuintesCompleta.forEach(contribuinte => {
+      if (contribuinte.name) {
+        this.buscaGenero(contribuinte.name.split(' ')[0]).then(() => {
+          qtdExecucoes = qtdExecucoes + 1;
+          console.log('this.listaContribuintesCompleta');
+          console.log(this.listaContribuintesCompleta);
+
+          console.log('qtdExecucoes');
+          console.log(qtdExecucoes);
+
+          if (qtdExecucoes === this.listaContribuintesCompleta.length) {
+            this.calculaDiversidade(projeto);
+          }
+        });
+      } else {
+        qtdExecucoes = qtdExecucoes + 1;
+
+        if (qtdExecucoes === this.listaContribuintesCompleta.length) {
+          this.calculaDiversidade(projeto);
+        }
+      }
+    });
+
+    console.log('abacate abacate abacate abacate abacate');
+  }
+
+  private calculaDiversidade(projeto: string) {
+    console.log('xxxxxxxx this.listaContribuintesCompleta xxxxxxxx');
+    console.log(this.listaContribuintesCompleta);
   }
 }

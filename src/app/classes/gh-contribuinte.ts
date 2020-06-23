@@ -56,4 +56,5 @@ export interface GhContribuinte {
     type: string;
     updated_at: string;
     url: string;
+    gender: string;
 }
