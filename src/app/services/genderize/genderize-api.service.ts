@@ -5,11 +5,9 @@ import { Genderize } from 'src/app/classes/genderize';
 
 @Injectable()
 export class GenderizeApiService {
-  private baseUrl = 'https://api.genderize.io';
-
   constructor(private http: HttpClient) {}
 
   consultarGenero(nome: string): Observable<Genderize> {
-      return this.http.get(`${this.baseUrl}?name=${nome}`) as Observable<Genderize>;
+      return this.http.get(`https://api.genderize.io?name=${nome}`) as Observable<Genderize>;
   }
 }

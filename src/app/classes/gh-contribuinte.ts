@@ -21,6 +21,7 @@ export interface GhRepoContribuinte {
     };
     total: number;
     weeks: Array<any>;
+    projeto: string;
 }
 
 export interface GhContribuinte {
@@ -57,4 +58,5 @@ export interface GhContribuinte {
     updated_at: string;
     url: string;
     gender: string;
+    projeto: string;
 }

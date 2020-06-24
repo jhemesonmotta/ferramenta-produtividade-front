@@ -33,7 +33,9 @@ export class RodarScrappersComponent implements OnInit {
   //                         'kotlin'];
 
   // Variáveis públicas (podem ser exibidas no HTML)
+
   listaDeLinguagens = ['JavaScript'];
+
   listaRetorno: Array<ProjectEvaluation> = [];
   listaProjetos: Array<ProjectEvaluation> = [];
   listaContribuintesBusca: Array<GhRepoContribuinte> = [];
@@ -47,6 +49,7 @@ export class RodarScrappersComponent implements OnInit {
   private consultarContribuintesPromise: Promise<void>;
   private consultarUsuarioPromise: Promise<void>;
   private consultarGeneroPromise: Promise<void>;
+  private calculaDiversidadePromise: Promise<void>;
 
   constructor(public githubApiService: GithubApiService,
     public sharedService: SharedService,
@@ -117,19 +120,33 @@ export class RodarScrappersComponent implements OnInit {
 
   calcularDiversidadeGenero() {
     console.log('calcularDiversidadeGenero');
-    // pega os 100 últimos contribuintes
-    // minera o gênero de cada um
-    // faz o calculo de diversidade
+    let index = 0;
 
-    // 1 = 50% homens
-    // 0 = 100% homens || 100% mulher
-    // diversidade = 100 - |pct homens - pct mulheres|
+    // while (index < this.listaProjetos.length) {
+    while (index < 2) {
+      index = index + 1;
+        console.log('EXECUTA PARA: ' + this.listaProjetos[index].nome);
+        console.log('EXECUTA PARA: ' + this.listaProjetos[index].nome);
+        console.log('EXECUTA PARA: ' + this.listaProjetos[index].nome);
+        console.log('EXECUTA PARA: ' + this.listaProjetos[index].nome);
+        console.log('EXECUTA PARA: ' + this.listaProjetos[index].nome);
+        console.log('EXECUTA PARA: ' + this.listaProjetos[index].nome);
+        console.log('EXECUTA PARA: ' + this.listaProjetos[index].nome);
+        console.log('EXECUTA PARA: ' + this.listaProjetos[index].nome);
+        console.log('EXECUTA PARA: ' + this.listaProjetos[index].nome);
+        console.log('EXECUTA PARA: ' + this.listaProjetos[index].nome);
+        console.log('EXECUTA PARA: ' + this.listaProjetos[index].nome);
+        console.log('EXECUTA PARA: ' + this.listaProjetos[index].nome);
+        console.log('EXECUTA PARA: ' + this.listaProjetos[index].nome);
+        console.log('EXECUTA PARA: ' + this.listaProjetos[index].nome);
+        console.log('EXECUTA PARA: ' + this.listaProjetos[index].nome);
+        console.log('EXECUTA PARA: ' + this.listaProjetos[index].nome);
 
-    // this.listaProjetos.forEach(projeto => {
+        this.calcularDiversidadeDeGenero(this.listaProjetos[index].nome).then(() => {
+          console.log('to no theeeeeeeeeeen');
+        });
+    }
 
-      this.calcularDiversidadeDeGenero('freeCodeCamp/freeCodeCamp');
-
-    // });
   }
 
   calcularCorrelacaoTamanho() {
@@ -152,7 +169,7 @@ export class RodarScrappersComponent implements OnInit {
     this.retornarReposPromise = this.githubApiService.consultarRepositorios(linguagem, 1)
     .toPromise()
     .then((data) => {
-      data.items.forEach(projeto => {
+      data.items.slice(0, 10).forEach(projeto => {
         this.listaRetorno.push({
           nome: projeto.full_name,
           homePage: projeto.homepage,
@@ -237,7 +254,6 @@ export class RodarScrappersComponent implements OnInit {
     .toPromise()
     .then((data) => {
       console.log('consultarBaseRepo');
-
       // tamanho da comunidade = (stargazers + watchers) / 2
       const tamanhoComunidade = (Number(data.stargazers_count) + Number(data.watchers_count)) / 2;
       this.listaProjetos.filter(p => p.nome === projeto)[0].tamanhoComunidade = tamanhoComunidade;
@@ -251,22 +267,25 @@ export class RodarScrappersComponent implements OnInit {
   }
 
   private calcularDiversidadeDeGenero(projeto: string) {
-    this.consultarContribuintes(projeto).then(() => {
+    console.log('calcularDiversidadeDeGenero');
+    this.calculaDiversidadePromise = this.consultarContribuintes(projeto).then(() => {
       console.log('this.listaContribuintesBusca');
-      console.log(this.listaContribuintesBusca);
+      console.log(this.listaContribuintesBusca.filter(c => c.projeto === projeto));
 
-      this.listaContribuintesBusca.forEach(contribuinte => {
-        this.consultarUsuario(contribuinte.author.url).then(() => {
+      // TODO: tirar o slice
+      this.listaContribuintesBusca.filter(c => c.projeto === projeto).forEach(contribuinte => {
+        this.consultarUsuario(contribuinte.author.url, contribuinte.projeto).then(() => {
           console.log(this.listaContribuintesCompleta);
-
           // semântica = acabou?
-          if (this.listaContribuintesCompleta.length === this.listaContribuintesBusca.length) {
-            console.log('this.buscaGeneroLista()');
+          if (this.listaContribuintesCompleta.filter(c => c.projeto === projeto).length
+          === this.listaContribuintesBusca.filter(c => c.projeto === projeto).length) {
             this.buscaGeneroLista(projeto);
           }
         });
       });
     });
+
+    return this.calculaDiversidadePromise;
   }
 
   private consultarContribuintes(projeto: string) {
@@ -274,7 +293,8 @@ export class RodarScrappersComponent implements OnInit {
     .consultarContribuintes(projeto)
     .toPromise()
     .then((data) => {
-      this.listaContribuintesBusca = data;
+      data.forEach(d => d.projeto = projeto);
+      Array.prototype.push.apply(this.listaContribuintesBusca, data);
     },
     (error) => {
       console.log('error');
@@ -284,11 +304,12 @@ export class RodarScrappersComponent implements OnInit {
     return this.consultarContribuintesPromise;
   }
 
-  private consultarUsuario(url: string) {
+  private consultarUsuario(url: string, projeto: string) {
     this.consultarUsuarioPromise = this.githubApiService
     .consultarUsuario(url)
     .toPromise()
     .then((usuario) => {
+      usuario.projeto = projeto;
       this.listaContribuintesCompleta.push(usuario);
     },
     (error) => {
@@ -304,10 +325,9 @@ export class RodarScrappersComponent implements OnInit {
     .consultarGenero(nome)
     .toPromise()
     .then((genderize) => {
-      console.log('buscaGenero');
-      console.log(genderize);
-
-      this.listaContribuintesCompleta.filter(contrib => contrib.name && contrib.name.includes(nome))[0].gender = genderize.gender;
+      this.listaContribuintesCompleta
+      .filter(contrib => contrib.name && contrib.name.includes(nome))
+      .forEach(contrib => contrib.gender = genderize.gender);
     },
     (error) => {
       console.log('error');
@@ -320,34 +340,56 @@ export class RodarScrappersComponent implements OnInit {
   private buscaGeneroLista(projeto: string) {
     let qtdExecucoes = 0;
 
-    this.listaContribuintesCompleta.forEach(contribuinte => {
+    this.listaContribuintesCompleta.filter(c => c.projeto === projeto).forEach(contribuinte => {
       if (contribuinte.name) {
         this.buscaGenero(contribuinte.name.split(' ')[0]).then(() => {
           qtdExecucoes = qtdExecucoes + 1;
-          console.log('this.listaContribuintesCompleta');
-          console.log(this.listaContribuintesCompleta);
 
           console.log('qtdExecucoes');
           console.log(qtdExecucoes);
 
-          if (qtdExecucoes === this.listaContribuintesCompleta.length) {
+          if (qtdExecucoes === this.listaContribuintesCompleta.filter(c => c.projeto === projeto).length) {
             this.calculaDiversidade(projeto);
           }
         });
       } else {
         qtdExecucoes = qtdExecucoes + 1;
 
-        if (qtdExecucoes === this.listaContribuintesCompleta.length) {
+        if (qtdExecucoes === this.listaContribuintesCompleta.filter(c => c.projeto === projeto).length) {
           this.calculaDiversidade(projeto);
         }
       }
     });
-
-    console.log('abacate abacate abacate abacate abacate');
   }
 
   private calculaDiversidade(projeto: string) {
-    console.log('xxxxxxxx this.listaContribuintesCompleta xxxxxxxx');
-    console.log(this.listaContribuintesCompleta);
+    console.log('xxxxxxxx this.listaContribuintesCompleta.filter(c => c.projeto === projeto) xxxxxxxx');
+    console.log(this.listaContribuintesCompleta.filter(c => c.projeto === projeto));
+
+    const pctHomens = (this.listaContribuintesCompleta
+      .filter(c => c.projeto === projeto && c.gender === 'male').length / this.listaContribuintesCompleta.filter(c => c.projeto === projeto).length) * 100;
+    const pctMulheres = (this.listaContribuintesCompleta
+      .filter(c => c.projeto === projeto && c.gender === 'female').length / this.listaContribuintesCompleta.filter(c => c.projeto === projeto).length) * 100;
+
+    const diferencaAbsolutaArredondada = +(Math.abs(pctHomens - pctMulheres)).toFixed(3);
+
+    const diversidade = 100 - diferencaAbsolutaArredondada;
+
+    console.log('projeto');
+    console.log(projeto);
+
+    console.log('diversidade');
+    console.log(diversidade);
+
+    this.listaProjetos.filter(p => p.nome === projeto)[0].diversidade = diversidade;
+
+    console.log('this.listaProjetos');
+    console.log(this.listaProjetos);
+
+    this.sharedService.guardaListaProjetos(this.listaProjetos);
+
+    console.log('this.sharedService.recuperaListaProjetos()');
+    console.log(this.sharedService.recuperaListaProjetos());
+    // limpa todas as listas aqui ou no caller
   }
 }
