@@ -16,52 +16,52 @@ export class GithubApiService {
   constructor(private http: HttpClient) {}
 
   consultarBaseRepo(projeto: string): Observable<any> {
-    this.wait(1000);
+    this.wait(2000);
     return this.http.get(`${GITHUB_BASE_URL}repos/${projeto}`) as Observable<any>;
   }
 
   consultarCommits(projeto: string): Observable<Array<GhRepoCommit>> {
-    this.wait(1000);
+    this.wait(2000);
     return this.http.get(`${GITHUB_BASE_URL}repos/${projeto}/commits`) as Observable<Array<GhRepoCommit>>;
   }
 
   consultarBranches(projeto: string): Observable<Array<GhRepoBranch>> {
-    this.wait(1000);
+    this.wait(2000);
     return this.http.get(`${GITHUB_BASE_URL}repos/${projeto}/branches`) as Observable<Array<GhRepoBranch>>;
   }
 
   consultarForks(projeto: string): Observable<Array<any>> {
-    this.wait(1000);
+    this.wait(2000);
     return this.http.get(`${GITHUB_BASE_URL}repos/${projeto}/forks`) as Observable<Array<any>>;
   }
 
   consultarReleases(projeto: string): Observable<Array<GhRepoRelease>> {
-    this.wait(1000);
+    this.wait(2000);
     return this.http.get(`${GITHUB_BASE_URL}repos/${projeto}/releases`) as Observable<Array<GhRepoRelease>>;
   }
 
   consultarContribuintes(projeto: string): Observable<Array<GhRepoContribuinte>> {
-    this.wait(1000);
+    this.wait(2000);
     return this.http.get(`${GITHUB_BASE_URL}repos/${projeto}/stats/contributors`) as Observable<Array<GhRepoContribuinte>>;
   }
 
   consultarAtividadesDeCommitUltimoAno(projeto: string): Observable<Array<GhRepoAtividadeUltimoAno>> {
-    this.wait(1000);
+    this.wait(2000);
     return this.http.get(`${GITHUB_BASE_URL}repos/${projeto}/stats/commit_activity`) as Observable<Array<GhRepoAtividadeUltimoAno>>;
   }
 
   consultarAdicoesDelecoes(projeto: string): Observable<Array<any>> {
-    this.wait(1000);
+    this.wait(2000);
     return this.http.get(`${GITHUB_BASE_URL}repos/${projeto}/stats/code_frequency`) as Observable<Array<any>>;
   }
 
   consultarParticipacaoExternaEDoDono(projeto: string): Observable<GhRepoParticipacaoExterna> {
-    this.wait(1000);
+    this.wait(2000);
     return this.http.get(`${GITHUB_BASE_URL}repos/${projeto}/stats/participation`) as Observable<GhRepoParticipacaoExterna>;
   }
 
   consultarUsuario(url: string): Observable<GhContribuinte> {
-    this.wait(1000);
+    this.wait(2000);
     return this.http.get(url) as Observable<GhContribuinte>;
   }
 

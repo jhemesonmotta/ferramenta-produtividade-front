@@ -79,7 +79,10 @@ export class RodarScrappersComponent implements OnInit {
     console.log('calcularQualidade()');
     this.listaProjetos.forEach(projeto => {
 
+      console.log('calculaQualidade(): ' + projeto.nome);
+
       if (projeto.homePage != null && projeto.homePage !== '') {
+        console.log('entrou');
         this.consultarMetricas(projeto.homePage).then(() => {
           this.sharedService.guardaListaProjetos(this.listaProjetos);
           console.log('this.sharedService.recuperaListaProjetos()');
@@ -122,27 +125,12 @@ export class RodarScrappersComponent implements OnInit {
     console.log('calcularDiversidadeGenero');
     let index = 0;
 
-    // while (index < this.listaProjetos.length) {
-    while (index < 2) {
+    while (index < this.listaProjetos.length) {
+    // while (index < 2) {
       index = index + 1;
-        console.log('EXECUTA PARA: ' + this.listaProjetos[index].nome);
-        console.log('EXECUTA PARA: ' + this.listaProjetos[index].nome);
-        console.log('EXECUTA PARA: ' + this.listaProjetos[index].nome);
-        console.log('EXECUTA PARA: ' + this.listaProjetos[index].nome);
-        console.log('EXECUTA PARA: ' + this.listaProjetos[index].nome);
-        console.log('EXECUTA PARA: ' + this.listaProjetos[index].nome);
-        console.log('EXECUTA PARA: ' + this.listaProjetos[index].nome);
-        console.log('EXECUTA PARA: ' + this.listaProjetos[index].nome);
-        console.log('EXECUTA PARA: ' + this.listaProjetos[index].nome);
-        console.log('EXECUTA PARA: ' + this.listaProjetos[index].nome);
-        console.log('EXECUTA PARA: ' + this.listaProjetos[index].nome);
-        console.log('EXECUTA PARA: ' + this.listaProjetos[index].nome);
-        console.log('EXECUTA PARA: ' + this.listaProjetos[index].nome);
-        console.log('EXECUTA PARA: ' + this.listaProjetos[index].nome);
-        console.log('EXECUTA PARA: ' + this.listaProjetos[index].nome);
-        console.log('EXECUTA PARA: ' + this.listaProjetos[index].nome);
+        console.log('EXECUTA PARA: ' + this.listaProjetos[index - 1].nome);
 
-        this.calcularDiversidadeDeGenero(this.listaProjetos[index].nome).then(() => {
+        this.calcularDiversidadeDeGenero(this.listaProjetos[index - 1].nome).then(() => {
           console.log('to no theeeeeeeeeeen');
         });
     }
@@ -196,6 +184,7 @@ export class RodarScrappersComponent implements OnInit {
   }
 
   private consultarMetricas(url: string) {
+    console.log(`consultarMetricas(${url})`);
     this.consultarMetricasPromise = this.pageSpeedApiService.consultarMetricas(url)
     .toPromise()
     .then((data) => {
@@ -228,16 +217,15 @@ export class RodarScrappersComponent implements OnInit {
     this.consultarCommitsPromise = this.githubApiService.consultarAtividadesDeCommitUltimoAno(projeto)
     .toPromise()
     .then((listaCommitsRetorno: Array<GhRepoAtividadeUltimoAno>) => {
-
-      let frequenciaCommits = 0;
-
-      listaCommitsRetorno.forEach(item => {
-        frequenciaCommits = frequenciaCommits + item.total;
-      });
-
-      if (frequenciaCommits > 0) {
-        frequenciaCommits = frequenciaCommits / 365;
-        this.listaProjetos.filter(p => p.nome === projeto)[0].frequenciaCommits = frequenciaCommits;
+      if (listaCommitsRetorno.length > 0) {
+        let frequenciaCommits = 0;
+        listaCommitsRetorno.forEach(item => {
+          frequenciaCommits = frequenciaCommits + item.total;
+        });
+        if (frequenciaCommits > 0) {
+          frequenciaCommits = frequenciaCommits / 365;
+          this.listaProjetos.filter(p => p.nome === projeto)[0].frequenciaCommits = frequenciaCommits;
+        }
       }
     },
     (error) => {
@@ -275,7 +263,6 @@ export class RodarScrappersComponent implements OnInit {
       // TODO: tirar o slice
       this.listaContribuintesBusca.filter(c => c.projeto === projeto).forEach(contribuinte => {
         this.consultarUsuario(contribuinte.author.url, contribuinte.projeto).then(() => {
-          console.log(this.listaContribuintesCompleta);
           // semântica = acabou?
           if (this.listaContribuintesCompleta.filter(c => c.projeto === projeto).length
           === this.listaContribuintesBusca.filter(c => c.projeto === projeto).length) {
@@ -344,9 +331,6 @@ export class RodarScrappersComponent implements OnInit {
       if (contribuinte.name) {
         this.buscaGenero(contribuinte.name.split(' ')[0]).then(() => {
           qtdExecucoes = qtdExecucoes + 1;
-
-          console.log('qtdExecucoes');
-          console.log(qtdExecucoes);
 
           if (qtdExecucoes === this.listaContribuintesCompleta.filter(c => c.projeto === projeto).length) {
             this.calculaDiversidade(projeto);

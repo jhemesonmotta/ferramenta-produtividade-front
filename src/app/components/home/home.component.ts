@@ -16,6 +16,9 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     console.log('teste');
+
+    this.requisicaoGenderize();
+
     // this.teste();
 
     // this.requisicaoGenderize();
@@ -122,7 +125,7 @@ export class HomeComponent implements OnInit {
   }
 
   requisicaoGenderize() {
-    this.genderizeApiService.consultarGenero('Jhonatan Silva Mota').subscribe((data) => {
+    this.genderizeApiService.consultarGenero('Jhonatan').subscribe((data) => {
       console.log('consultarGenero');
       console.log(data);
     },
