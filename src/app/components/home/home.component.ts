@@ -3,6 +3,8 @@ import { GithubApiService } from 'src/app/services/github/github-api.service';
 import { PageSpeedApiService } from 'src/app/services/pagespeed/pagespeed-api.service';
 import { PageSpeed } from 'src/app/classes/pagespeed';
 import { GenderizeApiService } from 'src/app/services/genderize/genderize-api.service';
+import * as NodeParser from 'node-html-parser';
+import axios from 'axios';
 
 @Component({
   selector: 'app-home',
@@ -10,6 +12,7 @@ import { GenderizeApiService } from 'src/app/services/genderize/genderize-api.se
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
+
   constructor(public githubApiService: GithubApiService,
               public pageSpeedApiService: PageSpeedApiService,
               public genderizeApiService: GenderizeApiService) { }
@@ -17,7 +20,7 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     console.log('teste');
 
-    this.requisicaoGenderize();
+    this.scrape();
 
     // this.teste();
 
@@ -133,5 +136,20 @@ export class HomeComponent implements OnInit {
       console.log('error');
       console.log(error);
     });
+  }
+
+  private scrape() {
+    console.log('scrape()');
+
+    const AxiosInstance = axios.create();
+    const url = 'https://github.com/MisterBooo/LeetCodeAnimation';
+
+    AxiosInstance.get(url).then((response) => {
+        const txtHtml = response.data;
+        const parsedHtml = NodeParser.parse(txtHtml);
+
+        console.log(parsedHtml.querySelector('h2 a span.Counter').text);
+
+    }).catch(console.error); // Error handling
   }
 }

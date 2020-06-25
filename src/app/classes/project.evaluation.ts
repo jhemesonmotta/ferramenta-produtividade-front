@@ -4,6 +4,7 @@ export interface ProjectEvaluation {
     qualidade: PageSpeedQualidade;
     frequenciaCommits: number;
     tamanhoComunidade: number;
+    qtdContribuintes: number;
     diversidade: number;
     tamanho: number;
 }

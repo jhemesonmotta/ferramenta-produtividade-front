@@ -8,10 +8,11 @@ import { GhRepoContribuinte, GhContribuinte } from 'src/app/classes/gh-contribui
 import { GhRepoAtividadeUltimoAno } from 'src/app/classes/gh-atividade-ultimo-ano';
 import { GhRepoParticipacaoExterna } from 'src/app/classes/gh-participacao-externa';
 import { GITHUB_BASE_URL } from 'src/app/global/global';
+import * as NodeParser from 'node-html-parser';
+import axios from 'axios';
 
 @Injectable()
 export class GithubApiService {
-
 
   constructor(private http: HttpClient) {}
 

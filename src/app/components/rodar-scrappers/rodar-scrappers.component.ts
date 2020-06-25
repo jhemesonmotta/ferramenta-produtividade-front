@@ -6,6 +6,8 @@ import { PageSpeedApiService } from 'src/app/services/pagespeed/pagespeed-api.se
 import { GhRepoAtividadeUltimoAno } from 'src/app/classes/gh-atividade-ultimo-ano';
 import { GhRepoContribuinte, GhContribuinte } from 'src/app/classes/gh-contribuinte';
 import { GenderizeApiService } from 'src/app/services/genderize/genderize-api.service';
+import * as NodeParser from 'node-html-parser';
+import axios from 'axios';
 
 @Component({
   selector: 'app-rodar-scrappers',
@@ -50,6 +52,7 @@ export class RodarScrappersComponent implements OnInit {
   private consultarUsuarioPromise: Promise<void>;
   private consultarGeneroPromise: Promise<void>;
   private calculaDiversidadePromise: Promise<void>;
+  private calculaQtdContribuintesPromise: Promise<void>;
 
   constructor(public githubApiService: GithubApiService,
     public sharedService: SharedService,
@@ -109,8 +112,20 @@ export class RodarScrappersComponent implements OnInit {
   }
 
   calcularBaseDesenvolvedores() {
-    // (stargazers + watchers) / 2
     console.log('calcularBaseDesenvolvedores()');
+
+    this.listaProjetos.forEach(projeto => {
+      this.calculaQtdContribuintes(projeto.nome).then(() => {
+        this.sharedService.guardaListaProjetos(this.listaProjetos);
+        console.log('this.sharedService.recuperaListaProjetos()');
+        console.log(this.sharedService.recuperaListaProjetos());
+      });
+    });
+  }
+
+  calcularTamanhoComunidade() {
+    // (stargazers + watchers) / 2
+    console.log('calcularTamanhoComunidade()');
 
     this.listaProjetos.forEach(projeto => {
       this.consultarTamanhoComunidade(projeto.nome).then(() => {
@@ -138,7 +153,8 @@ export class RodarScrappersComponent implements OnInit {
   }
 
   calcularCorrelacaoTamanho() {
-    // correlação de tamanho = quantidade total de commits / quantidade total de contribuintes
+    // correlação de tamanho = quantidade total de commits (fazer scrapper pra pegar) / quantidade total de contribuintes
+    console.log('calcularCorrelacaoTamanho');
 
     this.listaProjetos.forEach(projeto => {
 
@@ -149,6 +165,8 @@ export class RodarScrappersComponent implements OnInit {
       // });
 
     });
+
+    // this.calculaCorrelacaoTamanho('MisterBooo/LeetCodeAnimation');
   }
 
   // Métodos Privados - Lower Level
@@ -172,7 +190,8 @@ export class RodarScrappersComponent implements OnInit {
           },
           tamanhoComunidade: 0,
           diversidade: 0,
-          frequenciaCommits: 0
+          frequenciaCommits: 0,
+          qtdContribuintes: 0
         });
       });
     }, (error) => {
@@ -375,5 +394,29 @@ export class RodarScrappersComponent implements OnInit {
     console.log('this.sharedService.recuperaListaProjetos()');
     console.log(this.sharedService.recuperaListaProjetos());
     // limpa todas as listas aqui ou no caller
+  }
+
+  private calculaQtdContribuintes(projeto: string) {
+      console.log('calculaQtdContribuintes()');
+
+      const AxiosInstance = axios.create();
+      const url = `https://github.com/${projeto}`;
+      this.calculaQtdContribuintesPromise = AxiosInstance.get(url).then((response) => {
+          const txtHtml = response.data;
+          const parsedHtml = NodeParser.parse(txtHtml);
+          const quantidadeContribuintes = Number((parsedHtml.querySelector('h2 a span.Counter').text).replace(',', ''));
+
+          console.log('projeto');
+          console.log(projeto);
+          console.log('quantidadeContribuintes');
+          console.log(quantidadeContribuintes);
+
+          this.listaProjetos.filter(p => p.nome === projeto)[0].qtdContribuintes = quantidadeContribuintes;
+      }).catch(error => {
+        console.log('error');
+        console.log(error);
+      }); // Error handling
+
+      return this.calculaQtdContribuintesPromise;
   }
 }
