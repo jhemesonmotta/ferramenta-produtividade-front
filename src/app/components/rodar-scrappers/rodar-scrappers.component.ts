@@ -140,14 +140,14 @@ export class RodarScrappersComponent implements OnInit {
     console.log('calcularDiversidadeGenero');
     let index = 0;
 
-    while (index < this.listaProjetos.length) {
-    // while (index < 2) {
+    // while (index < this.listaProjetos.length) {
+    while (index < 2) {
       index = index + 1;
-        console.log('EXECUTA PARA: ' + this.listaProjetos[index - 1].nome);
+      console.log('EXECUTA PARA: ' + this.listaProjetos[index - 1].nome);
 
-        this.calcularDiversidadeDeGenero(this.listaProjetos[index - 1].nome).then(() => {
-          console.log('to no theeeeeeeeeeen');
-        });
+      this.calcularDiversidadeDeGenero(this.listaProjetos[index - 1].nome).then(() => {
+        console.log('to no theeeeeeeeeeen');
+      });
     }
 
   }
@@ -258,14 +258,12 @@ export class RodarScrappersComponent implements OnInit {
   }
 
   private calcularDiversidadeDeGenero(projeto: string) {
-    console.log('calcularDiversidadeDeGenero');
     this.calculaDiversidadePromise = this.consultarContribuintes(projeto).then(() => {
       console.log('this.listaContribuintesBusca');
       console.log(this.listaContribuintesBusca.filter(c => c.projeto === projeto));
 
-      // TODO: tirar o slice
       this.listaContribuintesBusca.filter(c => c.projeto === projeto).forEach(contribuinte => {
-        this.consultarUsuario(contribuinte.author.url, contribuinte.projeto).then(() => {
+        this.consultarUsuario(contribuinte.author.html_url, contribuinte.projeto).then(() => {
           // semântica = acabou?
           if (this.listaContribuintesCompleta.filter(c => c.projeto === projeto).length
           === this.listaContribuintesBusca.filter(c => c.projeto === projeto).length) {
@@ -294,20 +292,37 @@ export class RodarScrappersComponent implements OnInit {
     return this.consultarContribuintesPromise;
   }
 
-  private consultarUsuario(url: string, projeto: string) {
-    this.consultarUsuarioPromise = this.githubApiService
-    .consultarUsuario(url)
-    .toPromise()
-    .then((usuario) => {
-      usuario.projeto = projeto;
-      this.listaContribuintesCompleta.push(usuario);
-    },
-    (error) => {
-      console.log('error');
-      console.log(error);
-    });
+  private wait(ms) {
+    const start = new Date().getTime();
+    let end = start;
+    while (end < start + ms) {
+      end = new Date().getTime();
+   }
+ }
 
-    return this.consultarUsuarioPromise;
+  private consultarUsuario(html_url: string, projeto: string) {
+    const AxiosInstance = axios.create();
+      const url = html_url;
+      this.wait(1000);
+      this.consultarUsuarioPromise = AxiosInstance.get(url).then((response) => {
+          const txtHtml = response.data;
+          const parsedHtml = NodeParser.parse(txtHtml);
+          this.listaContribuintesCompleta.push({
+            gender: '',
+            html_url: html_url,
+            name: parsedHtml.querySelector('[itemprop=name]').text,
+            projeto: projeto
+          });
+
+          console.log('this.listaContribuintesCompleta');
+          console.log(this.listaContribuintesCompleta);
+
+        }).catch(error => {
+        console.log('error');
+        console.log(error);
+      }); // Error handling
+
+      return this.consultarUsuarioPromise;
   }
 
   private buscaGenero(nome: string) {
@@ -337,6 +352,7 @@ export class RodarScrappersComponent implements OnInit {
 
           if (qtdExecucoes === this.listaContribuintesCompleta.filter(c => c.projeto === projeto).length) {
             this.calculaDiversidade(projeto);
+            console.log('this.calculaDiversidade');
           }
         });
       } else {
@@ -344,6 +360,7 @@ export class RodarScrappersComponent implements OnInit {
 
         if (qtdExecucoes === this.listaContribuintesCompleta.filter(c => c.projeto === projeto).length) {
           this.calculaDiversidade(projeto);
+          console.log('this.calculaDiversidade');
         }
       }
     });

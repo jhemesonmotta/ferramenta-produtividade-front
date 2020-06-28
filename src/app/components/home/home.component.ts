@@ -142,14 +142,17 @@ export class HomeComponent implements OnInit {
     console.log('scrape()');
 
     const AxiosInstance = axios.create();
-    const url = 'https://github.com/MisterBooo/LeetCodeAnimation';
+    const url = 'https://github.com/MisterBooo/LeetCodeAnimation/graphs/contributors';
 
     AxiosInstance.get(url).then((response) => {
         const txtHtml = response.data;
         const parsedHtml = NodeParser.parse(txtHtml);
 
-        console.log(parsedHtml.querySelector('h2 a span.Counter').text);
+        console.log('parsedHtml');
+        console.log(parsedHtml.querySelector('.contrib-person'));
 
     }).catch(console.error); // Error handling
   }
+
+  
 }
