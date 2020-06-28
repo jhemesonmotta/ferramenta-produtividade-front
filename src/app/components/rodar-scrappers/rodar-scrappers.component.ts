@@ -392,7 +392,8 @@ export class RodarScrappersComponent implements OnInit {
           const quantidadeCommits = Number((parsedHtml.querySelector('a span strong').text).replace(',', ''));
           this.listaProjetos.filter(p => p.nome === projeto)[0].qtdContribuintes = quantidadeContribuintes;
           this.listaProjetos.filter(p => p.nome === projeto)[0].qtdCommits = quantidadeCommits;
-      }).catch(error => {
+          this.listaProjetos.filter(p => p.nome === projeto)[0].correlacaoTamanho = quantidadeCommits / quantidadeContribuintes;
+        }).catch(error => {
         console.log('error');
         console.log(error);
       }); // Error handling
