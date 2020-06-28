@@ -111,8 +111,8 @@ export class RodarScrappersComponent implements OnInit {
     });
   }
 
-  calcularBaseDesenvolvedores() {
-    console.log('calcularBaseDesenvolvedores()');
+  calcularCorrelacaoTamanho() {
+    console.log('calcularCorrelacaoTamanho()');
 
     this.listaProjetos.forEach(projeto => {
       this.calculaQtdContribuintes(projeto.nome).then(() => {
@@ -152,23 +152,6 @@ export class RodarScrappersComponent implements OnInit {
 
   }
 
-  calcularCorrelacaoTamanho() {
-    // correlação de tamanho = quantidade total de commits (fazer scrapper pra pegar) / quantidade total de contribuintes
-    console.log('calcularCorrelacaoTamanho');
-
-    this.listaProjetos.forEach(projeto => {
-
-      // this.consultarRepositorios(linguagem).then(() => {
-      //   this.sharedService.guardaListaProjetos(this.listaProjetos);
-      //   console.log('this.sharedService.recuperaListaProjetos()');
-      //   console.log(this.sharedService.recuperaListaProjetos());
-      // });
-
-    });
-
-    // this.calculaCorrelacaoTamanho('MisterBooo/LeetCodeAnimation');
-  }
-
   // Métodos Privados - Lower Level
 
   private consultarRepositorios(linguagem: string) {
@@ -179,7 +162,8 @@ export class RodarScrappersComponent implements OnInit {
         this.listaRetorno.push({
           nome: projeto.full_name,
           homePage: projeto.homepage,
-          tamanho: 0,
+          qtdCommits: 0,
+          correlacaoTamanho: 0,
           qualidade: {
             accesibilidade: 0,
             melhoresPraticas: 0,
@@ -405,13 +389,9 @@ export class RodarScrappersComponent implements OnInit {
           const txtHtml = response.data;
           const parsedHtml = NodeParser.parse(txtHtml);
           const quantidadeContribuintes = Number((parsedHtml.querySelector('h2 a span.Counter').text).replace(',', ''));
-
-          console.log('projeto');
-          console.log(projeto);
-          console.log('quantidadeContribuintes');
-          console.log(quantidadeContribuintes);
-
+          const quantidadeCommits = Number((parsedHtml.querySelector('a span strong').text).replace(',', ''));
           this.listaProjetos.filter(p => p.nome === projeto)[0].qtdContribuintes = quantidadeContribuintes;
+          this.listaProjetos.filter(p => p.nome === projeto)[0].qtdCommits = quantidadeCommits;
       }).catch(error => {
         console.log('error');
         console.log(error);
@@ -419,4 +399,5 @@ export class RodarScrappersComponent implements OnInit {
 
       return this.calculaQtdContribuintesPromise;
   }
+
 }
