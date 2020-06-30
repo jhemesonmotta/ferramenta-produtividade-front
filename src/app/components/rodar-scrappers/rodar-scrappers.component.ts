@@ -173,20 +173,20 @@ export class RodarScrappersComponent implements OnInit {
           id: null,
           nome: projeto.full_name,
           homePage: projeto.homepage,
-          qtdCommits: 0,
-          correlacaoTamanho: 0,
+          qtdCommits: null,
+          correlacaoTamanho: null,
           qualidade: {
-            accesibilidade: 0,
-            melhoresPraticas: 0,
-            performance: 0,
-            pwa: 0,
-            seo: 0,
-            total: 0
+            accesibilidade: null,
+            melhoresPraticas: null,
+            performance: null,
+            pwa: null,
+            seo: null,
+            total: null
           },
-          tamanhoComunidade: 0,
-          diversidade: 0,
-          frequenciaCommits: 0,
-          qtdContribuintes: 0
+          tamanhoComunidade: null,
+          diversidade: null,
+          frequenciaCommits: null,
+          qtdContribuintes: null
         });
       });
     }, (error) => {
