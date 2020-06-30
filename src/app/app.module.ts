@@ -13,6 +13,7 @@ import { SharedService } from './services/shared.service';
 import { RodarScrappersComponent } from './components/rodar-scrappers/rodar-scrappers.component';
 import { HttpTokenInterceptor } from './httpinterceptor/http.token.interceptor';
 import { ProjetoService } from './services/backend/projeto.service';
+import { MinerarProjetoComponent } from './components/minerar-projeto/minerar-projeto.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { ProjetoService } from './services/backend/projeto.service';
     HomeComponent,
     PaginaNaoEncontradaComponent,
     TopProjetosComponent,
-    RodarScrappersComponent
+    RodarScrappersComponent,
+    MinerarProjetoComponent
   ],
   imports: [
     BrowserModule,

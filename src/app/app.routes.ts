@@ -4,6 +4,7 @@ import {ModuleWithProviders} from '@angular/core';
 import { PaginaNaoEncontradaComponent } from './components/pagina-nao-encontrada/pagina-nao-encontrada.component';
 import { TopProjetosComponent } from './components/top-projetos/top-projetos.component';
 import { RodarScrappersComponent } from './components/rodar-scrappers/rodar-scrappers.component';
+import { MinerarProjetoComponent } from './components/minerar-projeto/minerar-projeto.component';
 
 export const ROUTES: Routes = [
   {
@@ -17,6 +18,10 @@ export const ROUTES: Routes = [
   {
     path: 'rodar-scrappers',
     component: RodarScrappersComponent
+  },
+  {
+    path: 'minerar-projeto',
+    component: MinerarProjetoComponent
   },
   {
     path: '**',

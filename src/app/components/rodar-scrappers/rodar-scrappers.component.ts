@@ -8,6 +8,7 @@ import { GhRepoContribuinte, GhContribuinte } from 'src/app/classes/gh-contribui
 import { GenderizeApiService } from 'src/app/services/genderize/genderize-api.service';
 import * as NodeParser from 'node-html-parser';
 import axios from 'axios';
+import { ProjetoService } from 'src/app/services/backend/projeto.service';
 
 @Component({
   selector: 'app-rodar-scrappers',
@@ -57,7 +58,8 @@ export class RodarScrappersComponent implements OnInit {
   constructor(public githubApiService: GithubApiService,
     public sharedService: SharedService,
     public pageSpeedApiService: PageSpeedApiService,
-    public genderizeApiService: GenderizeApiService) { }
+    public genderizeApiService: GenderizeApiService,
+    public projetoService: ProjetoService) { }
 
   ngOnInit() {
     console.log('this.sharedService.recuperaListaProjetos()');
@@ -74,6 +76,14 @@ export class RodarScrappersComponent implements OnInit {
         this.sharedService.guardaListaProjetos(this.listaRetorno);
         console.log('this.sharedService.recuperaListaProjetos()');
         console.log(this.sharedService.recuperaListaProjetos());
+
+        this.listaRetorno.forEach(projeto => {
+          this.projetoService.criar(projeto).subscribe(
+            (data) => {
+              console.log('data');
+              console.log(data);
+            });
+        });
       });
     });
   }
