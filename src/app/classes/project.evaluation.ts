@@ -1,4 +1,5 @@
 export interface ProjectEvaluation {
+    id: number;
     nome: string;
     homePage: string;
     qualidade: PageSpeedQualidade;

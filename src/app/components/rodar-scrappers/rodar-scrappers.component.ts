@@ -160,6 +160,7 @@ export class RodarScrappersComponent implements OnInit {
     .then((data) => {
       data.items.slice(0, 10).forEach(projeto => {
         this.listaRetorno.push({
+          id: null,
           nome: projeto.full_name,
           homePage: projeto.homepage,
           qtdCommits: 0,

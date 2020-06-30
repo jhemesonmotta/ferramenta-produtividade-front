@@ -12,6 +12,7 @@ import { TopProjetosComponent } from './components/top-projetos/top-projetos.com
 import { SharedService } from './services/shared.service';
 import { RodarScrappersComponent } from './components/rodar-scrappers/rodar-scrappers.component';
 import { HttpTokenInterceptor } from './httpinterceptor/http.token.interceptor';
+import { ProjetoService } from './services/backend/projeto.service';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { HttpTokenInterceptor } from './httpinterceptor/http.token.interceptor';
     routes
   ],
   providers: [
+    ProjetoService,
     SharedService,
     GithubApiService,
     PageSpeedApiService,
