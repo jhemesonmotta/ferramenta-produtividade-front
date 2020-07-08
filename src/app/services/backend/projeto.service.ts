@@ -27,7 +27,7 @@ export class ProjetoService {
     }
 
     criarLista(projetos: Array<ProjectEvaluation>): Observable<any> {
-        return this.http.post(`${BACKEND_API}projetos`, projetos) as Observable<any>;
+        return this.http.post(`${BACKEND_API}projetos/addAll`, { projetos: projetos }) as Observable<any>;
     }
 
     salvar(projeto: ProjectEvaluation): Observable<any> {

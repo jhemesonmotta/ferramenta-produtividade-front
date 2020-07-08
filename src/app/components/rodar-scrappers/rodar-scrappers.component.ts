@@ -19,25 +19,25 @@ export class RodarScrappersComponent implements OnInit {
   // motivo: as 15 mais utilizadas de 2020 até agora
   // fonte: https://madnight.github.io/githut/#/pull_requests/2020/1
 
-  // listaDeLinguagens = ['javascript',
-  //                         'python',
-  //                         'java',
-  //                         'go',
-  //                         'cpp',
-  //                         'ruby',
-  //                         'typescript',
-  //                         'php',
-  //                         'csharp',
-  //                         'C',
-  //                         'scala',
-  //                         'shell',
-  //                         'rust',
-  //                         'swift',
-  //                         'kotlin'];
+  listaDeLinguagens = ['javascript',
+                          'python',
+                          'java',
+                          'go',
+                          'cpp',
+                          'ruby',
+                          'typescript',
+                          'php',
+                          'csharp',
+                          'C',
+                          'scala',
+                          'shell',
+                          'rust',
+                          'swift',
+                          'kotlin'];
 
   // Variáveis públicas (podem ser exibidas no HTML)
 
-  listaDeLinguagens = ['JavaScript'];
+  // listaDeLinguagens = ['JavaScript'];
 
   listaRetorno: Array<ProjectEvaluation> = [];
   listaProjetos: Array<ProjectEvaluation> = [];
@@ -77,13 +77,14 @@ export class RodarScrappersComponent implements OnInit {
         console.log('this.sharedService.recuperaListaProjetos()');
         console.log(this.sharedService.recuperaListaProjetos());
 
-        this.listaRetorno.forEach(projeto => {
-          this.projetoService.criar(projeto).subscribe(
+        console.log('this.listaRetorno');
+        console.log(this.listaRetorno);
+
+          this.projetoService.criarLista(this.listaRetorno.filter(proj => proj.linguagemProgramacao === linguagem)).subscribe(
             (data) => {
               console.log('data');
               console.log(data);
             });
-        });
       });
     });
   }
@@ -168,11 +169,14 @@ export class RodarScrappersComponent implements OnInit {
     this.retornarReposPromise = this.githubApiService.consultarRepositorios(linguagem, 1)
     .toPromise()
     .then((data) => {
-      data.items.slice(0, 10).forEach(projeto => {
+      // TODO: tirar o slice
+      // data.items.slice(0, 10).forEach(projeto => {
+      data.items.forEach(projeto => {
         this.listaRetorno.push({
           id: null,
           nome: projeto.full_name,
           homePage: projeto.homepage,
+          linguagemProgramacao: linguagem,
           qtdCommits: null,
           correlacaoTamanho: null,
           qualidade: {

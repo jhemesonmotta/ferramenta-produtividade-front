@@ -2,6 +2,7 @@ export interface ProjectEvaluation {
     id: number;
     nome: string;
     homePage: string;
+    linguagemProgramacao: string;
     qualidade: PageSpeedQualidade;
     diversidade: number;
     frequenciaCommits: number;
