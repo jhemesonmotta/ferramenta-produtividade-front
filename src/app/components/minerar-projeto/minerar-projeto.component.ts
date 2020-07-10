@@ -65,6 +65,10 @@ export class MinerarProjetoComponent implements OnInit {
     });
   }
 
+  projetosRodados() {
+    return this.listaProjetos.filter(proj => proj.qtdContribuintes && proj.qtdCommits && proj.tamanhoComunidade).length;
+  }
+
   decidirProjeto() {
     this.listaProjetos.forEach(proj => {
       if (proj.qtdContribuintes === null && proj.qtdCommits === null

@@ -30,6 +30,10 @@ export class ProjetoService {
         return this.http.post(`${BACKEND_API}projetos/addAll`, { projetos: projetos }) as Observable<any>;
     }
 
+    criarListaProducao(projetos: Array<ProjectEvaluation>): Observable<any> {
+        return this.http.post(`https://ferramenta-produtividade-back.herokuapp.com/api/v1/projetos/addAll`, { projetos: projetos }) as Observable<any>;
+    }
+
     salvar(projeto: ProjectEvaluation): Observable<any> {
         return this.http.post(`${BACKEND_API}projetos/edit`, projeto) as Observable<any>;
     }

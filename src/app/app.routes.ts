@@ -5,6 +5,7 @@ import { PaginaNaoEncontradaComponent } from './components/pagina-nao-encontrada
 import { TopProjetosComponent } from './components/top-projetos/top-projetos.component';
 import { RodarScrappersComponent } from './components/rodar-scrappers/rodar-scrappers.component';
 import { MinerarProjetoComponent } from './components/minerar-projeto/minerar-projeto.component';
+import { AtualizarHerokuComponent } from './components/atualizar-heroku/atualizar-heroku.component';
 
 export const ROUTES: Routes = [
   {
@@ -22,6 +23,10 @@ export const ROUTES: Routes = [
   {
     path: 'minerar-projeto',
     component: MinerarProjetoComponent
+  },
+  {
+    path: 'atualizar-heroku',
+    component: AtualizarHerokuComponent
   },
   {
     path: '**',

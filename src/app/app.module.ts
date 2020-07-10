@@ -14,6 +14,7 @@ import { RodarScrappersComponent } from './components/rodar-scrappers/rodar-scra
 import { HttpTokenInterceptor } from './httpinterceptor/http.token.interceptor';
 import { ProjetoService } from './services/backend/projeto.service';
 import { MinerarProjetoComponent } from './components/minerar-projeto/minerar-projeto.component';
+import { AtualizarHerokuComponent } from './components/atualizar-heroku/atualizar-heroku.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { MinerarProjetoComponent } from './components/minerar-projeto/minerar-pr
     PaginaNaoEncontradaComponent,
     TopProjetosComponent,
     RodarScrappersComponent,
-    MinerarProjetoComponent
+    MinerarProjetoComponent,
+    AtualizarHerokuComponent
   ],
   imports: [
     BrowserModule,
