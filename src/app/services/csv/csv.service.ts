@@ -1,9 +1,8 @@
 export class CsvDataService {
-    static exportToCsv(filename: string, rows: object[]) {
+    static exportToCsv(filename: string, separator: string, rows: object[]) {
       if (!rows || !rows.length) {
         return;
       }
-      const separator = ',';
       const keys = Object.keys(rows[0]);
       const csvContent =
         keys.join(separator) +

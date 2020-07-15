@@ -20,3 +20,22 @@ export interface PageSpeedQualidade {
     pwa: number;
     seo: number;
 }
+
+export interface ProjectEvaluationCsv {
+    id: number;
+    nome: string;
+    homePage: string;
+    linguagemProgramacao: string;
+    diversidade: string;
+    frequenciaCommits: string;
+    tamanhoComunidade: string;
+    qtdContribuintes: string;
+    qtdCommits: string;
+    correlacaoTamanho: string;
+    qualidade_total: string;
+    qualidade_accesibilidade: string;
+    qualidade_melhoresPraticas: string;
+    qualidade_performance: string;
+    qualidade_pwa: string;
+    qualidade_seo: string;
+}

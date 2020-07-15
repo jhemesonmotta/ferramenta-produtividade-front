@@ -14,6 +14,10 @@ export class ProjetoService {
         return this.http.get(`${BACKEND_API}projetos`) as Observable<Array<ProjectEvaluation>>;
     }
 
+    listarProducao(): Observable<Array<ProjectEvaluation>> {
+        return this.http.get(`https://ferramenta-produtividade-back.herokuapp.com/api/v1/projetos`) as Observable<Array<ProjectEvaluation>>;
+    }
+
     buscarPorID(identificador: number): Observable<ProjectEvaluation> {
         return this.http.get(`${BACKEND_API}projetos/${identificador}`) as Observable<ProjectEvaluation>;
     }
