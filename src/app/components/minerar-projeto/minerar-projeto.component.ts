@@ -321,6 +321,7 @@ export class MinerarProjetoComponent implements OnInit {
           const parsedHtml = NodeParser.parse(txtHtml);
           const quantidadeContribuintes = Number((parsedHtml.querySelector('h2 a span.Counter').text).replace(',', ''));
           const quantidadeCommits = Number((parsedHtml.querySelector('a span strong').text).replace(',', ''));
+          
           this.projetoDaVez.qtdContribuintes = quantidadeContribuintes;
           this.projetoDaVez.qtdCommits = quantidadeCommits;
           this.projetoDaVez.correlacaoTamanho = quantidadeCommits / quantidadeContribuintes;

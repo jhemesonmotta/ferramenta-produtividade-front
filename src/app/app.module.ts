@@ -15,6 +15,7 @@ import { HttpTokenInterceptor } from './httpinterceptor/http.token.interceptor';
 import { ProjetoService } from './services/backend/projeto.service';
 import { MinerarProjetoComponent } from './components/minerar-projeto/minerar-projeto.component';
 import { AtualizarHerokuComponent } from './components/atualizar-heroku/atualizar-heroku.component';
+import { GerarCsvComponent } from './components/gerar-csv/gerar-csv.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { AtualizarHerokuComponent } from './components/atualizar-heroku/atualiza
     TopProjetosComponent,
     RodarScrappersComponent,
     MinerarProjetoComponent,
-    AtualizarHerokuComponent
+    AtualizarHerokuComponent,
+    GerarCsvComponent
   ],
   imports: [
     BrowserModule,
