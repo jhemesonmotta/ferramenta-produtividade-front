@@ -16,6 +16,9 @@ import { ProjetoService } from './services/backend/projeto.service';
 import { MinerarProjetoComponent } from './components/minerar-projeto/minerar-projeto.component';
 import { AtualizarHerokuComponent } from './components/atualizar-heroku/atualizar-heroku.component';
 import { GerarCsvComponent } from './components/gerar-csv/gerar-csv.component';
+import { LutadorScraperComponent } from './components/mmastats/lutador-scraper/lutador-scraper.component';
+import { LutaScraperComponent } from './components/mmastats/luta-scraper/luta-scraper.component';
+import { LutadoresService } from './services/mmastats/mmastats.service';
 
 @NgModule({
   declarations: [
@@ -26,7 +29,9 @@ import { GerarCsvComponent } from './components/gerar-csv/gerar-csv.component';
     RodarScrappersComponent,
     MinerarProjetoComponent,
     AtualizarHerokuComponent,
-    GerarCsvComponent
+    GerarCsvComponent,
+    LutadorScraperComponent,
+    LutaScraperComponent
   ],
   imports: [
     BrowserModule,
@@ -39,6 +44,7 @@ import { GerarCsvComponent } from './components/gerar-csv/gerar-csv.component';
     GithubApiService,
     PageSpeedApiService,
     GenderizeApiService,
+    LutadoresService,
     {provide: HTTP_INTERCEPTORS, useClass: HttpTokenInterceptor, multi: true}
   ],
   bootstrap: [AppComponent]

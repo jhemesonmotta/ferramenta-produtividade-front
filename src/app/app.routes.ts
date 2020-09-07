@@ -7,6 +7,7 @@ import { RodarScrappersComponent } from './components/rodar-scrappers/rodar-scra
 import { MinerarProjetoComponent } from './components/minerar-projeto/minerar-projeto.component';
 import { AtualizarHerokuComponent } from './components/atualizar-heroku/atualizar-heroku.component';
 import { GerarCsvComponent } from './components/gerar-csv/gerar-csv.component';
+import { LutadorScraperComponent } from './components/mmastats/lutador-scraper/lutador-scraper.component';
 
 export const ROUTES: Routes = [
   {
@@ -32,6 +33,10 @@ export const ROUTES: Routes = [
   {
     path: 'gerar-csv',
     component: GerarCsvComponent
+  },
+  {
+    path: 'scrape-lutadores',
+    component: LutadorScraperComponent
   },
   {
     path: '**',

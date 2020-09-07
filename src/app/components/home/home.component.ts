@@ -19,8 +19,8 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     console.log('teste');
-
-    this.scrape();
+    
+    // this.scrapeSherdog();
 
     // this.teste();
 
@@ -154,5 +154,4 @@ export class HomeComponent implements OnInit {
     }).catch(console.error); // Error handling
   }
 
-  
 }
