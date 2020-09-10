@@ -11,7 +11,7 @@ export class LutadoresService {
 
   addLutador(lutador: Lutador): Observable<any> {
       console.log('lutador');
-      console.log(lutador);
+      console.log(JSON.stringify(lutador));
     return this.http.post<Lutador>(`https://mma-stats.herokuapp.com/v1/lutador`, lutador) as Observable<any>;
   }
 

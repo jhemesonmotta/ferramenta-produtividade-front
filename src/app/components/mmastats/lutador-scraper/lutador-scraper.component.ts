@@ -55,16 +55,11 @@ export class LutadorScraperComponent implements OnInit {
   }
 
   private scrapeProfileSherdog(url) {
-    console.log('scrapeProfileSherdog()');
-
     const AxiosInstance = axios.create();
 
     AxiosInstance.get(url).then((response) => {
         const txtHtml = response.data;
         const parsedHtml = NodeParser.parse(txtHtml);
-
-        // console.log('parsedHtml');
-        // console.log(parsedHtml.querySelector('.right_side .bio_graph').childNodes[1].childNodes[3].text);
 
         let lutador:Lutador = new Lutador();
 
@@ -106,25 +101,25 @@ export class LutadorScraperComponent implements OnInit {
   }
 
   private traduzCategoria(nome: string) {
-    if ('Strawweight') {
+    if (nome === 'Strawweight') {
       return 'Palha';
-    } else if ('Atomweight') {
+    } else if (nome === 'Atomweight') {
       return 'Átomo';
-    } else if ('Flyweight') {
+    } else if (nome === 'Flyweight') {
       return 'Mosca';
-    } else if ('Bantamweight') {
+    } else if (nome === 'Bantamweight') {
       return 'Galo';
-    } else if ('Featherweight') {
+    } else if (nome === 'Featherweight') {
       return 'Pena';
-    } else if ('Lightweight') {
+    } else if (nome === 'Lightweight') {
       return 'Leve';
-    } else if ('Welterweight') {
+    } else if (nome === 'Welterweight') {
       return 'Meio-Médio';
-    } else if ('Middleweight') {
+    } else if (nome === 'Middleweight') {
       return 'Médio';
-    } else if ('Light Heavyweight') {
+    } else if (nome === 'Light Heavyweight') {
       return 'Meio-Pesado';
-    } else if ('Heavyweight') {
+    } else if (nome === 'Heavyweight') {
       return 'Pesado';
     } else {
       return 'Super Pesado';
