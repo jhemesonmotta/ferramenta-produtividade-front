@@ -19,6 +19,8 @@ import { GerarCsvComponent } from './components/gerar-csv/gerar-csv.component';
 import { LutadorScraperComponent } from './components/mmastats/lutador-scraper/lutador-scraper.component';
 import { LutaScraperComponent } from './components/mmastats/luta-scraper/luta-scraper.component';
 import { LutadoresService } from './services/mmastats/mmastats.service';
+import { OrganizacaoScraperComponent } from './components/mmastats/organizacao-scraper/organizacao-scraper.component';
+import { EventoScraperComponent } from './components/mmastats/evento-scraper/evento-scraper.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +33,9 @@ import { LutadoresService } from './services/mmastats/mmastats.service';
     AtualizarHerokuComponent,
     GerarCsvComponent,
     LutadorScraperComponent,
-    LutaScraperComponent
+    LutaScraperComponent,
+    OrganizacaoScraperComponent,
+    EventoScraperComponent
   ],
   imports: [
     BrowserModule,

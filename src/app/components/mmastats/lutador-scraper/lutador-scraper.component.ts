@@ -43,11 +43,11 @@ export class LutadorScraperComponent implements OnInit {
   constructor(public lutadoresService: LutadoresService) { }
 
   ngOnInit() {
-    this.scrapeSherdog();
+    this.scrapeLutadores();
   }
 
-  private scrapeSherdog() {
-    console.log('scrapeSherdog()');
+  private scrapeLutadores() {
+    console.log('scrapeLutadores()');
 
     this.lutadoresParaGuardar.forEach(lutador => {
       this.scrapeProfileSherdog(lutador);
@@ -61,7 +61,7 @@ export class LutadorScraperComponent implements OnInit {
         const txtHtml = response.data;
         const parsedHtml = NodeParser.parse(txtHtml);
 
-        let lutador:Lutador = new Lutador();
+        const lutador: Lutador = new Lutador();
 
         lutador.nome = parsedHtml.querySelector('span.fn').text;
         try {
@@ -172,4 +172,19 @@ export class Lutador {
   d_decisao: number;
   // derrotas_outras: number;
   empates: number;
+}
+
+export class Organizacao {
+  id: number;
+  nome: string;
+  peso: number;
+}
+
+export class Evento {
+  id: number;
+  idSherdog: string;
+  titulo: string;
+  localizacao: string;
+  organizacao: Organizacao;
+  data: string;
 }
