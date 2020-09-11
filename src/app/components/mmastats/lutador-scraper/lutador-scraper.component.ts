@@ -176,6 +176,7 @@ export class Lutador {
 
 export class Organizacao {
   id: number;
+  idSherdog: number;
   nome: string;
   peso: number;
 }

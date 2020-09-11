@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Evento, Organizacao } from '../lutador-scraper/lutador-scraper.component';
 import * as NodeParser from 'node-html-parser';
 import axios from 'axios';
+import { LutadoresService } from 'src/app/services/mmastats/mmastats.service';
 
 @Component({
   selector: 'app-organizacao-scraper',
@@ -18,7 +19,7 @@ export class OrganizacaoScraperComponent implements OnInit {
     'https://www.sherdog.com/organizations/Bellator-MMA-1960',
   ];
 
-  constructor() { }
+  constructor(public lutadoresService: LutadoresService) { }
 
   ngOnInit() {
     this.scrapeOrganizacoes();
@@ -42,6 +43,7 @@ export class OrganizacaoScraperComponent implements OnInit {
 
         const organizacao: Organizacao = new Organizacao();
 
+        organizacao.idSherdog = url;
         organizacao.nome = parsedHtml.querySelector('h2').text;
         organizacao.peso = 1.2;
 
@@ -54,11 +56,21 @@ export class OrganizacaoScraperComponent implements OnInit {
 
         // AQUI - ADD organização -> no response chama o lista eventos
 
-        this.listaEventos(parsedHtml, organizacao);
+        this.lutadoresService.addOrganizacao(organizacao).subscribe((data) => {
+          console.log('adicionou data');
+          console.log(data);
+          this.listaEventos(parsedHtml, data);
+        },
+        (error) => {
+          console.log('organizacao que deu erro');
+          console.log(organizacao);
+          console.log('error');
+          console.log(error);
+        });
     }).catch(console.error); // Error handling
   }
 
-  private listaEventos(parsedHtml, organizacao) {
+  private listaEventos(parsedHtml, organizacao: Organizacao) {
     const upcomingEvents = parsedHtml.querySelector('#events_list').childNodes[3].childNodes[1].childNodes;
     const pastEvents = parsedHtml.querySelector('#events_list').childNodes[5].childNodes[1].childNodes;
 
@@ -68,7 +80,7 @@ export class OrganizacaoScraperComponent implements OnInit {
 
         const evento: Evento = new Evento();
         evento.titulo = childNode.childNodes[3].childNodes[1].structuredText;
-        evento.idSherdog = childNode.childNodes[3].childNodes[1].rawAttributes.href;
+        evento.idSherdog = 'https://www.sherdog.com' + childNode.childNodes[3].childNodes[1].rawAttributes.href;
         evento.organizacao = organizacao;
         evento.localizacao = localizacaoSplit[localizacaoSplit.length - 1];
         evento.data = childNode.childNodes[1].childNodes[1].rawAttrs.split('content="')[1].replace('"','');
@@ -94,6 +106,18 @@ export class OrganizacaoScraperComponent implements OnInit {
 
     console.log('this.eventosParaAdd');
     console.log(this.eventosParaAdd);
+
+    this.eventosParaAdd.filter(e => e.organizacao.id === organizacao.id).forEach((event) => {
+      this.lutadoresService.addEvento(event).subscribe((data) => {
+        console.log('data');
+        console.log(data);
+      }, (error) => {
+        console.log('error');
+        console.log(error);
+      });
+    });
+
+    // ADD eventos onde organizacaoID === organizacao
   }
 
 }
