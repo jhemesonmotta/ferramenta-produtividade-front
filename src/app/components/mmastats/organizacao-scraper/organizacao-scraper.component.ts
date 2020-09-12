@@ -10,13 +10,14 @@ import { LutadoresService } from 'src/app/services/mmastats/mmastats.service';
   styleUrls: ['./organizacao-scraper.component.css']
 })
 export class OrganizacaoScraperComponent implements OnInit {
-  // cuida de adicionar (e dps editar) organizações e seus eventos (sem lutas)
   eventosParaAdd: Array<Evento> = [];
 
   organizacoesParaGuardar = [
     'https://www.sherdog.com/organizations/Rizin-Fighting-Federation-10333',
-    'https://www.sherdog.com/organizations/Ultimate-Fighting-Championship-UFC-2',
-    'https://www.sherdog.com/organizations/Bellator-MMA-1960',
+    // 'https://www.sherdog.com/organizations/Ultimate-Fighting-Championship-UFC-2',
+    // 'https://www.sherdog.com/organizations/Bellator-MMA-1960',
+    // 'https://www.sherdog.com/organizations/Professional-Fighters-League-12241',
+    // 'https://www.sherdog.com/organizations/Pride-Fighting-Championships-3'
   ];
 
   constructor(public lutadoresService: LutadoresService) { }
@@ -42,7 +43,7 @@ export class OrganizacaoScraperComponent implements OnInit {
 
         const organizacao: Organizacao = new Organizacao();
 
-        organizacao.idSherdog = url;
+        organizacao.id = url;
         organizacao.nome = parsedHtml.querySelector('h2').text;
         organizacao.peso = 1.2;
 
@@ -79,7 +80,7 @@ export class OrganizacaoScraperComponent implements OnInit {
 
         const evento: Evento = new Evento();
         evento.titulo = childNode.childNodes[3].childNodes[1].structuredText;
-        evento.idSherdog = 'https://www.sherdog.com' + childNode.childNodes[3].childNodes[1].rawAttributes.href;
+        evento.id = 'https://www.sherdog.com' + childNode.childNodes[3].childNodes[1].rawAttributes.href;
         evento.organizacao = organizacao;
         evento.localizacao = localizacaoSplit[localizacaoSplit.length - 1];
         evento.data = childNode.childNodes[1].childNodes[1].rawAttrs.split('content="')[1].replace('"','');
@@ -94,7 +95,7 @@ export class OrganizacaoScraperComponent implements OnInit {
 
         const evento: Evento = new Evento();
         evento.titulo = childNode.childNodes[3].childNodes[1].structuredText;
-        evento.idSherdog = childNode.childNodes[3].childNodes[1].rawAttributes.href;
+        evento.id = childNode.childNodes[3].childNodes[1].rawAttributes.href;
         evento.organizacao = organizacao;
         evento.localizacao = localizacaoSplit[localizacaoSplit.length - 1];
         evento.data = childNode.childNodes[1].childNodes[1].rawAttrs.split('content="')[1].replace('"','');

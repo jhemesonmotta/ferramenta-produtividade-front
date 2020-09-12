@@ -63,8 +63,8 @@ export class LutadorScraperComponent implements OnInit {
 
         const lutador: Lutador = new Lutador();
 
-        lutador.idSherdog = url;
-        
+        lutador.id = url;
+
         lutador.nome = parsedHtml.querySelector('span.fn').text;
         try {
           lutador.apelido = parsedHtml.querySelector('span.nickname').text.replace('"', '').replace('"', '');
@@ -155,8 +155,7 @@ export class LutadorScraperComponent implements OnInit {
 }
 
 export class Lutador {
-  id: number;
-  idSherdog: string;
+  id: string;
   nome: string;
   url_foto: string;
   apelido: string;
@@ -178,15 +177,13 @@ export class Lutador {
 }
 
 export class Organizacao {
-  id: number;
-  idSherdog: string;
+  id: string;
   nome: string;
   peso: number;
 }
 
 export class Evento {
-  id: number;
-  idSherdog: string;
+  id: string;
   titulo: string;
   localizacao: string;
   organizacao: Organizacao;
@@ -197,8 +194,8 @@ export class Luta {
   id: number;
   lutador_a: Lutador;
   lutador_b: Lutador;
-  evento: Evento;
-  vencedor_id: number;
+  evento_id: string;
+  vencedor_id: string;
   metodo: string;
   round: number;
   tempo: string;
