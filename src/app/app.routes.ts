@@ -9,6 +9,7 @@ import { AtualizarHerokuComponent } from './components/atualizar-heroku/atualiza
 import { GerarCsvComponent } from './components/gerar-csv/gerar-csv.component';
 import { LutadorScraperComponent } from './components/mmastats/lutador-scraper/lutador-scraper.component';
 import { OrganizacaoScraperComponent } from './components/mmastats/organizacao-scraper/organizacao-scraper.component';
+import { EventoScraperComponent } from './components/mmastats/evento-scraper/evento-scraper.component';
 
 export const ROUTES: Routes = [
   {
@@ -42,6 +43,10 @@ export const ROUTES: Routes = [
   {
     path: 'scrape-organizacoes',
     component: OrganizacaoScraperComponent
+  },
+  {
+    path: 'scrape-eventos',
+    component: EventoScraperComponent
   },
   {
     path: '**',

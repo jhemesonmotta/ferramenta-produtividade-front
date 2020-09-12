@@ -34,7 +34,6 @@ export class OrganizacaoScraperComponent implements OnInit {
   }
 
   private scrapeOrganizationSherdog(url) {
-    // tr.odd, tr.even
     const AxiosInstance = axios.create();
 
     AxiosInstance.get(url).then((response) => {
