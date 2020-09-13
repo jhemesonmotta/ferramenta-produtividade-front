@@ -15,12 +15,105 @@ export class EventoScraperComponent implements OnInit {
   public listaLutadoresExistentes: Array<Lutador> = [];
   public listaEventosExistentes: Array<Evento> = [];
   public listaLutasParaAdicionar: Array<Luta> = [];
+  public listaLutasQueDeramErro: Array<Luta> = [];
+  public listaLutasQueDeramErro2: Array<Luta> = [];
+  public listaLutasQueDeramErro3: Array<Luta> = [];
+  public listaLutasQueDeramErro4: Array<Luta> = [];
+  public listaLutasQueDeramErro5: Array<Luta> = [];
 
   constructor(public lutadoresService: LutadoresService) {}
 
   ngOnInit() {
-    this.buscarLutadores();
-    // this.scrapeEventos();
+    this.buscarEventos();
+  }
+
+  public criarLutas() {
+    console.log('criarLutas');
+    this.listaLutasParaAdicionar.forEach(lutaAdd => {
+      this.lutadoresService.addLuta(lutaAdd).subscribe((data) => {
+        console.log('luta adicionada');
+        console.log(data);
+      }, (error) => {
+        console.log('error');
+        console.log(error);
+        this.listaLutasQueDeramErro.push(lutaAdd);
+      });
+    });
+  }
+
+  public criarLutasDoErro() {
+    console.log('criarLutasDoErro');
+
+    this.listaLutasQueDeramErro.forEach(lutaAdd => {
+      this.lutadoresService.addLuta(lutaAdd).subscribe((data) => {
+        console.log('luta adicionada');
+        console.log(data);
+      }, (error) => {
+        console.log('error');
+        console.log(error);
+        this.listaLutasQueDeramErro2.push(lutaAdd);
+      });
+    });
+  }
+
+  public criarLutasDoErro2() {
+    console.log('criarLutasDoErro2');
+
+    this.listaLutasQueDeramErro2.forEach(lutaAdd => {
+      this.lutadoresService.addLuta(lutaAdd).subscribe((data) => {
+        console.log('luta adicionada');
+        console.log(data);
+      }, (error) => {
+        console.log('error');
+        console.log(error);
+        this.listaLutasQueDeramErro.push(lutaAdd);
+      });
+    });
+  }
+
+
+  public criarLutasDoErro3() {
+    console.log('criarLutasDoErro3');
+
+    this.listaLutasQueDeramErro3.forEach(lutaAdd => {
+      this.lutadoresService.addLuta(lutaAdd).subscribe((data) => {
+        console.log('luta adicionada');
+        console.log(data);
+      }, (error) => {
+        console.log('error');
+        console.log(error);
+        this.listaLutasQueDeramErro4.push(lutaAdd);
+      });
+    });
+  }
+
+  public criarLutasDoErro4() {
+    console.log('criarLutasDoErro4');
+
+    this.listaLutasQueDeramErro4.forEach(lutaAdd => {
+      this.lutadoresService.addLuta(lutaAdd).subscribe((data) => {
+        console.log('luta adicionada');
+        console.log(data);
+      }, (error) => {
+        console.log('error');
+        console.log(error);
+        this.listaLutasQueDeramErro5.push(lutaAdd);
+      });
+    });
+  }
+
+  public criarLutasDoErro5() {
+    console.log('criarLutasDoErro5');
+
+    this.listaLutasQueDeramErro5.forEach(lutaAdd => {
+      this.lutadoresService.addLuta(lutaAdd).subscribe((data) => {
+        console.log('luta adicionada');
+        console.log(data);
+      }, (error) => {
+        console.log('error');
+        console.log(error);
+      });
+    });
   }
 
   private buscarEventos() {
@@ -36,24 +129,6 @@ export class EventoScraperComponent implements OnInit {
     });
   }
 
-  private buscarLutadores() {
-    console.log('buscarLutadores');
-    this.lutadoresService.buscarLutadores().subscribe((lutadores) => {
-      console.log('lutadores');
-      console.log(lutadores);
-      this.listaLutadoresExistentes = lutadores;
-
-      this.buscarEventos();
-    }, (error) => {
-      console.log(error);
-    });
-  }
-
-  private buscaLutadorPorId(idSherdog: string): Lutador {
-    const lutadorEncontrado = this.listaLutadoresExistentes.filter(l => l.id === idSherdog);
-    return lutadorEncontrado.length > 0 ? lutadorEncontrado[0] : null;
-  }
-
   private scrapeEventos() {
     console.log('scrapeEventos()');
 
@@ -64,8 +139,9 @@ export class EventoScraperComponent implements OnInit {
 
   private scrapeEventoSherdog(evento: Evento) {
     const AxiosInstance = axios.create();
+    const urlMandar = evento.id.includes('sherdog') ? evento.id : ('https://www.sherdog.com/' + evento.id);
 
-    AxiosInstance.get(evento.id).then((response) => {
+    AxiosInstance.get(urlMandar).then((response) => {
         const txtHtml = response.data;
         const parsedHtml = NodeParser.parse(txtHtml);
 
@@ -80,39 +156,65 @@ export class EventoScraperComponent implements OnInit {
               parsedHtml.querySelector('.fight_card').childNodes[3].childNodes[3].childNodes[5].childNodes[1].rawAttributes.href;
 
 
-        const l1Existe = this.buscaLutadorPorId(lutadorA.id);
-        const l2Existe = this.buscaLutadorPorId(lutadorB.id);
-
         const mainEvent: Luta = new Luta();
         mainEvent.evento_id = evento.id;
         mainEvent.lutador_a = lutadorA;
         mainEvent.lutador_b = lutadorB;
-        mainEvent.metodo = parsedHtml.querySelector('.fight_card')
-            .childNodes[3].childNodes[5].childNodes[1].childNodes[1].childNodes[3].childNodes[2].text;
-        mainEvent.round = this.converteRound(parsedHtml.querySelector('.fight_card')
-            .childNodes[3].childNodes[5].childNodes[1].childNodes[1].childNodes[7].text);
-        mainEvent.tempo = parsedHtml.querySelector('.fight_card')
-            .childNodes[3].childNodes[5].childNodes[1].childNodes[1].childNodes[9].childNodes[2].text;
 
-        mainEvent.vencedor_id = this.decideVencedor(parsedHtml, lutadorA, lutadorB);
+        if (new Date(evento.data) < new Date()) {
+          let indexFooter = 5;
+
+          if (parsedHtml.querySelector('.fight_card').childNodes[3].childNodes[5].text === 'Live results play-by-play') {
+            indexFooter = 7;
+          }
+          
+          try {
+            mainEvent.metodo = parsedHtml.querySelector('.fight_card')
+            .childNodes[3].childNodes[indexFooter].childNodes[1].childNodes[1].childNodes[3].childNodes[2].text;
+          } catch (ex) {
+            console.log('ex');
+          }
+          try {
+            mainEvent.round = this.converteRound(parsedHtml.querySelector('.fight_card')
+            .childNodes[3].childNodes[indexFooter].childNodes[1].childNodes[1].childNodes[7].text);
+          } catch (ex) {
+            console.log('ex');
+          }
+          try {
+            mainEvent.tempo = parsedHtml.querySelector('.fight_card')
+            .childNodes[3].childNodes[indexFooter].childNodes[1].childNodes[1].childNodes[9].childNodes[2].text;
+          } catch (ex) {
+            console.log('ex');
+          }
+        }
+
+        try {
+          mainEvent.vencedor_id = this.decideVencedor(parsedHtml, lutadorA, lutadorB);
+        } catch (ex) {
+          console.log('ex');
+          mainEvent.vencedor_id = '';
+        }
 
         this.listaLutasParaAdicionar.push(mainEvent);
 
-        const nodesLutas = parsedHtml.querySelector('.event_match')
+        try {
+          const nodesLutas = parsedHtml.querySelector('.event_match')
             .childNodes[1].childNodes[1].childNodes[1].childNodes.filter(nd => nd.nodeType === 1 && !nd.rawText.includes('Fighters'));
 
-        nodesLutas.forEach(nodeLuta => {
-          this.listaLutasParaAdicionar.push(this.lutaConverter(nodeLuta, evento));
-        });
+            nodesLutas.forEach(nodeLuta => {
+              this.listaLutasParaAdicionar.push(this.lutaConverter(nodeLuta, evento));
+            });
+        } catch (ex) {
+          console.log('ex');
+        }
 
         console.log('this.listaLutasParaAdicionar');
         console.log(this.listaLutasParaAdicionar);
-
-
       }).catch(console.error); // Error handling
   }
 
   private lutaConverter(nodeLuta, evento: Evento): Luta {
+
     const lutaConvertida: Luta = new Luta();
     lutaConvertida.evento_id = evento.id;
 
@@ -120,21 +222,37 @@ export class EventoScraperComponent implements OnInit {
     let lutadorB: Lutador = new Lutador();
 
     lutadorA.nome = nodeLuta.childNodes[3].childNodes[5].childNodes[1].text;
-    lutadorA.id = 'https://www.sherdog.com';
+    lutadorA.id = 'https://www.sherdog.com' + nodeLuta.childNodes[3].childNodes[5].childNodes[1].rawAttributes.href;
     lutadorB.nome = nodeLuta.childNodes[7].childNodes[5].childNodes[1].text;
-    lutadorB.id = 'https://www.sherdog.com';
-
-    const l1Existe = this.buscaLutadorPorId(lutadorA.id);
-    const l2Existe = this.buscaLutadorPorId(lutadorB.id);
+    lutadorB.id = 'https://www.sherdog.com' + nodeLuta.childNodes[7].childNodes[5].childNodes[1].rawAttributes.href;
 
     lutaConvertida.lutador_a = lutadorA;
     lutaConvertida.lutador_b = lutadorB;
-    lutaConvertida.metodo = nodeLuta.childNodes[9].childNodes[0].text;
-    lutaConvertida.round = Number(nodeLuta.childNodes[11].text);
-    lutaConvertida.tempo = nodeLuta.childNodes[13].text;
-    lutaConvertida.vencedor_id = this.decideVencedorLista(nodeLuta.childNodes[3].childNodes[5].childNodes[4].text,
-              nodeLuta.childNodes[3].childNodes[5].childNodes[4].text,
-              lutadorA, lutadorB);
+    try {
+      lutaConvertida.metodo = nodeLuta.childNodes[9].childNodes[0].text;
+    } catch (ex) {
+      console.log('ex');
+    }
+
+    try {
+      lutaConvertida.round = Number(nodeLuta.childNodes[11].text);
+    } catch (ex) {
+      console.log('ex');
+    }
+
+    try {
+      lutaConvertida.tempo = nodeLuta.childNodes[13].text;
+    } catch (ex) {
+      console.log('ex');
+    }
+
+    try {
+      lutaConvertida.vencedor_id = this.decideVencedorLista(nodeLuta.childNodes[3].childNodes[5].childNodes[4].text,
+        nodeLuta.childNodes[3].childNodes[5].childNodes[4].text,
+        lutadorA, lutadorB);
+    } catch (ex) {
+      console.log('ex');
+    }
 
     return lutaConvertida;
   }

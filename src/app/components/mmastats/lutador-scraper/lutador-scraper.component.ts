@@ -10,51 +10,42 @@ import { LutadoresService } from 'src/app/services/mmastats/mmastats.service';
 })
 export class LutadorScraperComponent implements OnInit {
 
-  lutadoresParaGuardar = [
-    'https://www.sherdog.com/fighter/Jon-Jones-27944',
-    'https://www.sherdog.com/fighter/Georges-St-Pierre-3500',
-    'https://www.sherdog.com/fighter/Anderson-Silva-1356',
-    'https://www.sherdog.com/fighter/Khabib-Nurmagomedov-56035',
-    'https://www.sherdog.com/fighter/Fedor-Emelianenko-1500',
-    'https://www.sherdog.com/fighter/Demetrious-Johnson-45452',
-    'https://www.sherdog.com/fighter/Matt-Hughes-232',
-    'https://www.sherdog.com/fighter/Chuck-Liddell-192',
-    'https://www.sherdog.com/fighter/BJ-Penn-1307',
-    'https://www.sherdog.com/fighter/Conor-McGregor-29688',
-    'https://www.sherdog.com/fighter/Daniel-Cormier-52311',
-    'https://www.sherdog.com/fighter/Dominick-Cruz-12107',
-    'https://www.sherdog.com/fighter/Dan-Henderson-195',
-    'https://www.sherdog.com/fighter/Mauricio-Rua-5707',
-    'https://www.sherdog.com/fighter/Antonio-Rodrigo-Nogueira-1440',
-    'https://www.sherdog.com/fighter/Frankie-Edgar-14204',
-    'https://www.sherdog.com/fighter/Randy-Couture-166',
-    'https://www.sherdog.com/fighter/Wanderlei-Silva-209',
-    'https://www.sherdog.com/fighter/Quinton-Jackson-348',
-    'https://www.sherdog.com/fighter/Amanda-Nunes-31496',
-    'https://www.sherdog.com/fighter/Vitor-Belfort-156',
-    'https://www.sherdog.com/fighter/Fabricio-Werdum-8390',
-    'https://www.sherdog.com/fighter/Cain-Velasquez-19102',
-    'https://www.sherdog.com/fighter/Alistair-Overeem-461',
-    'https://www.sherdog.com/fighter/Cristiane-Justino-14477',
-  ];
-
+  lutadoresParaGuardar: Array<Lutador> = [];
   listaLutadores: Array<Lutador> = [];
+  listaLutadoresErro: Array<Lutador> = [];
+  listaLutadoresErro2: Array<Lutador> = [];
 
   constructor(public lutadoresService: LutadoresService) { }
 
   ngOnInit() {
-    this.scrapeLutadores();
+    this.buscaLutadores();
+  }
+
+  private buscaLutadores() {
+    this.lutadoresService.buscarLutadores().subscribe((data) => {
+      console.log('data');
+      console.log(data);
+      
+      this.lutadoresParaGuardar = data.filter(d => d.pais === '' && d.idade === 0);
+
+      console.log('this.lutadoresParaGuardar');
+      console.log(this.lutadoresParaGuardar);
+
+      this.scrapeLutadores();
+    }, (error) => {
+      console.log('error');
+      console.log(error);
+    });
   }
 
   private scrapeLutadores() {
     console.log('scrapeLutadores()');
-
     this.lutadoresParaGuardar.forEach(lutador => {
-      this.scrapeProfileSherdog(lutador);
+      this.scrapeProfileSherdog(lutador.id);
     });
   }
 
-  private scrapeProfileSherdog(url) {
+  private scrapeProfileSherdog(url: string) {
     const AxiosInstance = axios.create();
 
     AxiosInstance.get(url).then((response) => {
@@ -72,12 +63,31 @@ export class LutadorScraperComponent implements OnInit {
           lutador.apelido = '';
         }
         lutador.url_foto = '';
-        lutador.pais = parsedHtml.querySelector('.bio').structuredText.split('\n')[2];
-        lutador.idade = Number((parsedHtml.querySelector('.item.birthday strong').text.split(': '))[1]);
-        lutador.altura = this.converteAltura(parsedHtml.querySelector('.item.height strong').text);
-        lutador.categoria = this.traduzCategoria(parsedHtml.querySelector('.item.wclass strong').text);
-        lutador.peso = this.convertePeso(Number((parsedHtml.querySelector('.item.weight strong').text).split(' ')[0]));
-        lutador.equipe = parsedHtml.querySelector('.item.association').childNodes[3].text;
+
+        try {
+          lutador.pais = parsedHtml.querySelector('.bio').structuredText.split('\n')[2];
+        } catch (e) {}
+        
+        try {
+          lutador.idade = Number((parsedHtml.querySelector('.item.birthday strong').text.split(': '))[1]);
+        } catch (e) {}
+        
+        try {
+          lutador.altura = this.converteAltura(parsedHtml.querySelector('.item.height strong').text);
+        } catch (e) {}
+        
+        try {
+          lutador.categoria = this.traduzCategoria(parsedHtml.querySelector('.item.wclass strong').text);
+        } catch (e) {}
+        
+        try {
+          lutador.peso = this.convertePeso(Number((parsedHtml.querySelector('.item.weight strong').text).split(' ')[0]));
+        } catch (e) {}
+        
+        try {
+          lutador.equipe = parsedHtml.querySelector('.item.association').childNodes[3].text;
+        } catch (e) {}
+        
 
         lutador.v_kotko = Number(parsedHtml.querySelector('.left_side .bio_graph').childNodes[5].text.split(' ')[0]);
         lutador.v_submissao = Number(parsedHtml.querySelector('.left_side .bio_graph').childNodes[9].text.split(' ')[0]);
@@ -141,7 +151,39 @@ export class LutadorScraperComponent implements OnInit {
   }
 
   public adicionaLutadores() {
+    console.log('adicionaLutadores');
+    console.log(this.listaLutadores);
     this.listaLutadores.forEach(lutadorParaGuardar => {
+      this.lutadoresService.addLutador(lutadorParaGuardar).subscribe((data) => {
+        console.log('data');
+        console.log(data);
+      }, (error) => {
+        this.listaLutadoresErro.push(lutadorParaGuardar);
+        console.log('error');
+        console.log(error);
+      });
+    });
+  }
+
+  public adicionaLutadoresErro() {
+    console.log('adicionaLutadoresErro');
+    console.log(this.listaLutadoresErro);
+    this.listaLutadoresErro.forEach(lutadorParaGuardar => {
+      this.lutadoresService.addLutador(lutadorParaGuardar).subscribe((data) => {
+        console.log('data');
+        console.log(data);
+      }, (error) => {
+        this.listaLutadoresErro2.push(lutadorParaGuardar);
+        console.log('error');
+        console.log(error);
+      });
+    });
+  }
+
+  public adicionaLutadoresErro2() {
+    console.log('adicionaLutadoresErro2');
+    console.log(this.listaLutadoresErro2);
+    this.listaLutadoresErro2.forEach(lutadorParaGuardar => {
       this.lutadoresService.addLutador(lutadorParaGuardar).subscribe((data) => {
         console.log('data');
         console.log(data);
@@ -151,7 +193,6 @@ export class LutadorScraperComponent implements OnInit {
       });
     });
   }
-
 }
 
 export class Lutador {

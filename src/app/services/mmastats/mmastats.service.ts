@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Lutador, Organizacao, Evento } from 'src/app/components/mmastats/lutador-scraper/lutador-scraper.component';
+import { Lutador, Organizacao, Evento, Luta } from 'src/app/components/mmastats/lutador-scraper/lutador-scraper.component';
 
 @Injectable()
 export class LutadoresService {
@@ -11,6 +11,10 @@ export class LutadoresService {
 
   addLutador(lutador: Lutador): Observable<Lutador> {
     return this.http.post<Lutador>(`https://mma-stats.herokuapp.com/v1/lutador`, lutador) as Observable<Lutador>;
+  }
+
+  addLuta(luta: Luta): Observable<Luta> {
+    return this.http.post<Luta>(`https://mma-stats.herokuapp.com/v1/luta`, luta) as Observable<Luta>;
   }
 
   addOrganizacao(organizacao: Organizacao): Observable<Organizacao> {

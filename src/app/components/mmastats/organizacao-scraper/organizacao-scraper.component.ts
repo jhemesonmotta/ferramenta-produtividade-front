@@ -14,10 +14,10 @@ export class OrganizacaoScraperComponent implements OnInit {
 
   organizacoesParaGuardar = [
     'https://www.sherdog.com/organizations/Rizin-Fighting-Federation-10333',
-    // 'https://www.sherdog.com/organizations/Ultimate-Fighting-Championship-UFC-2',
-    // 'https://www.sherdog.com/organizations/Bellator-MMA-1960',
-    // 'https://www.sherdog.com/organizations/Professional-Fighters-League-12241',
-    // 'https://www.sherdog.com/organizations/Pride-Fighting-Championships-3'
+    'https://www.sherdog.com/organizations/Ultimate-Fighting-Championship-UFC-2',
+    'https://www.sherdog.com/organizations/Bellator-MMA-1960',
+    'https://www.sherdog.com/organizations/Professional-Fighters-League-12241',
+    'https://www.sherdog.com/organizations/Pride-Fighting-Championships-3'
   ];
 
   constructor(public lutadoresService: LutadoresService) { }
@@ -98,7 +98,7 @@ export class OrganizacaoScraperComponent implements OnInit {
         evento.id = childNode.childNodes[3].childNodes[1].rawAttributes.href;
         evento.organizacao = organizacao;
         evento.localizacao = localizacaoSplit[localizacaoSplit.length - 1];
-        evento.data = childNode.childNodes[1].childNodes[1].rawAttrs.split('content="')[1].replace('"','');
+        evento.data = childNode.childNodes[1].childNodes[1].rawAttrs.split('content="')[1].replace('"', '');
 
         this.eventosParaAdd.push(evento);
       }
