@@ -65,27 +65,21 @@ export class LutadorScraperComponent implements OnInit {
         try {
           lutador.pais = parsedHtml.querySelector('.bio').structuredText.split('\n')[2];
         } catch (e) {}
-        
         try {
           lutador.idade = Number((parsedHtml.querySelector('.item.birthday strong').text.split(': '))[1]);
         } catch (e) {}
-        
         try {
           lutador.altura = this.converteAltura(parsedHtml.querySelector('.item.height strong').text);
         } catch (e) {}
-        
         try {
           lutador.categoria = this.traduzCategoria(parsedHtml.querySelector('.item.wclass strong').text);
         } catch (e) {}
-        
         try {
           lutador.peso = this.convertePeso(Number((parsedHtml.querySelector('.item.weight strong').text).split(' ')[0]));
         } catch (e) {}
-        
         try {
           lutador.equipe = parsedHtml.querySelector('.item.association').childNodes[3].text;
         } catch (e) {}
-        
 
         lutador.v_kotko = Number(parsedHtml.querySelector('.left_side .bio_graph').childNodes[5].text.split(' ')[0]);
         lutador.v_submissao = Number(parsedHtml.querySelector('.left_side .bio_graph').childNodes[9].text.split(' ')[0]);
@@ -244,4 +238,5 @@ export class Luta {
   metodo: string;
   round: number;
   tempo: string;
+  evento: Evento;
 }

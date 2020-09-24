@@ -6,7 +6,7 @@ import { Lutador, Organizacao, Evento, Luta } from 'src/app/components/mmastats/
 @Injectable()
 export class LutadoresService {
 
-  mmaStatsApi = '${this.mmaStatsApi}';
+  mmaStatsApi = 'https://mma-stats.herokuapp.com/v1';
 
   constructor(private http: HttpClient) {
   }
