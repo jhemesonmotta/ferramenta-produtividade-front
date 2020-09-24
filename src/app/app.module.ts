@@ -21,6 +21,7 @@ import { LutaScraperComponent } from './components/mmastats/luta-scraper/luta-sc
 import { LutadoresService } from './services/mmastats/mmastats.service';
 import { OrganizacaoScraperComponent } from './components/mmastats/organizacao-scraper/organizacao-scraper.component';
 import { EventoScraperComponent } from './components/mmastats/evento-scraper/evento-scraper.component';
+import { ScoreUpdateComponent } from './components/mmastats/score-update/score-update.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { EventoScraperComponent } from './components/mmastats/evento-scraper/eve
     LutadorScraperComponent,
     LutaScraperComponent,
     OrganizacaoScraperComponent,
-    EventoScraperComponent
+    EventoScraperComponent,
+    ScoreUpdateComponent
   ],
   imports: [
     BrowserModule,

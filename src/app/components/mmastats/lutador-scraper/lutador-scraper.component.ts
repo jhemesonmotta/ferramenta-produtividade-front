@@ -25,9 +25,7 @@ export class LutadorScraperComponent implements OnInit {
     this.lutadoresService.buscarLutadores().subscribe((data) => {
       console.log('data');
       console.log(data);
-      
       this.lutadoresParaGuardar = data.filter(d => d.pais === '' && d.idade === 0);
-
       console.log('this.lutadoresParaGuardar');
       console.log(this.lutadoresParaGuardar);
 
@@ -195,6 +193,11 @@ export class LutadorScraperComponent implements OnInit {
   }
 }
 
+export class LutadorComLutas {
+  lutador: Lutador;
+  lutas: Array<Luta>;
+}
+
 export class Lutador {
   id: string;
   nome: string;
@@ -215,6 +218,7 @@ export class Lutador {
   d_decisao: number;
   // derrotas_outras: number;
   empates: number;
+  score: number;
 }
 
 export class Organizacao {

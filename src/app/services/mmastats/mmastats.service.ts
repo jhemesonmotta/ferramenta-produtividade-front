@@ -29,6 +29,10 @@ export class LutadoresService {
     return this.http.get(`https://mma-stats.herokuapp.com/v1/lutadores`) as Observable<Array<Lutador>>;
   }
 
+  buscarLutasPorLutador(id: string): Observable<Array<Luta>> {
+    return this.http.get(`https://mma-stats.herokuapp.com/v1/lutador/${id}/lutas`) as Observable<Array<Luta>>;
+  }
+
   buscarEventos(): Observable<Array<Evento>> {
     return this.http.get(`https://mma-stats.herokuapp.com/v1/eventos`) as Observable<Array<Evento>>;
   }
