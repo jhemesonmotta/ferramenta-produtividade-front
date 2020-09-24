@@ -12,6 +12,7 @@ export class LutadoresService {
   }
 
   addLutador(lutador: Lutador): Observable<Lutador> {
+    this.wait(100);
     return this.http.post<Lutador>(`${this.mmaStatsApi}/lutador`, lutador) as Observable<Lutador>;
   }
 
@@ -32,11 +33,20 @@ export class LutadoresService {
   }
 
   buscarLutasPorLutador(id: string): Observable<Array<Luta>> {
+    this.wait(100);
     return this.http.get(`${this.mmaStatsApi}/lutas?id_lutador=${id}`) as Observable<Array<Luta>>;
   }
 
   buscarEventos(): Observable<Array<Evento>> {
     return this.http.get(`${this.mmaStatsApi}/eventos`) as Observable<Array<Evento>>;
   }
+
+  private wait(ms) {
+    const start = new Date().getTime();
+    let end = start;
+    while (end < start + ms) {
+      end = new Date().getTime();
+   }
+ }
 
 }
