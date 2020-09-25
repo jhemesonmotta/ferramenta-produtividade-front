@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LutadoresService } from 'src/app/services/mmastats/mmastats.service';
-import { Lutador, LutadorComLutas } from '../lutador-scraper/lutador-scraper.component';
+import { Lutador, LutadorComLutas, Luta } from '../lutador-scraper/lutador-scraper.component';
 
 @Component({
   selector: 'app-score-update',
@@ -20,19 +20,23 @@ export class ScoreUpdateComponent implements OnInit {
     this.buscaLutadores();
   }
 
+  public buscaLutas(index: number) {
+    const listaVariavel = this.listaLutadores.slice((index - 1) * 400, index * 400);
+
+    listaVariavel.forEach(lutador => {
+      this.buscaLutasPorLutador(lutador);
+    });
+  }
+
   private buscaLutadores() {
     this.lutadoresService.buscarLutadores().subscribe((data) => {
-      this.listaLutadores = data.filter(d => d.score === 0);
+      this.listaLutadores = data.filter(d => d.score !== -999.999);
 
       // TODO: retirar quando for rodar de vdd
-      this.listaLutadores = this.listaLutadores.slice(0, 1000);
+      // this.listaLutadores = this.listaLutadores.slice(0, 1000);
 
       console.log('this.lutadoresParaGuardar');
       console.log(this.listaLutadores);
-
-      this.listaLutadores.forEach(lutador => {
-        this.buscaLutasPorLutador(lutador);
-      });
     }, (error) => {
       console.log('error');
       console.log(error);
@@ -52,6 +56,10 @@ export class ScoreUpdateComponent implements OnInit {
       console.log('error');
       console.log(error);
     });
+  }
+
+  private descobreAdversario(luta: Luta, lutador: Lutador) {
+    return luta.lutador_a.id === lutador.id ? luta.lutador_a : luta.lutador_b;
   }
 
   public calculaScore() {
@@ -77,11 +85,15 @@ export class ScoreUpdateComponent implements OnInit {
               score = score + (valorAtomico * (luta.evento.organizacao.peso / 2));
             } else if (luta.vencedor_id === lutador.lutador.id) {
               // vitória
+              const adversario = this.descobreAdversario(luta, lutador.lutador);
+              const pctVitoriasAdversario = (adversario.v_decisao + adversario.v_kotko + adversario.v_submissao) /
+                  (adversario.d_decisao + adversario.d_ko_tko + adversario.d_submissao
+                    + adversario.v_decisao + adversario.v_kotko + adversario.v_submissao);
 
               if (luta.metodo.includes('KO') || luta.metodo.includes('Submission')) {
-                score = score + (valorAtomico * luta.evento.organizacao.peso);
+                score = score + (pctVitoriasAdversario * (valorAtomico * luta.evento.organizacao.peso));
               } else {
-                score = score + (valorAtomico * (luta.evento.organizacao.peso - 0.1));
+                score = score + (pctVitoriasAdversario * (valorAtomico * (luta.evento.organizacao.peso - 0.1)));
               }
 
             } else {
@@ -92,10 +104,11 @@ export class ScoreUpdateComponent implements OnInit {
                 score = score - (valorAtomico * (2 - luta.evento.organizacao.peso));
               }
             }
-
           });
-          const adicionalVitorias = lutador.lutas.filter(ll => ll.vencedor_id === lutador.lutador.id).length * 10;
-          lutador.lutador.score = score + adicionalVitorias;
+
+          const adicionalVitorias = lutador.lutas.filter(ll => ll.vencedor_id === lutador.lutador.id).length * 25;
+          const remocaoDerrotas = lutador.lutas.filter(ll => ll.vencedor_id !== lutador.lutador.id && ll.vencedor_id !== '').length * 25;
+          lutador.lutador.score = score + adicionalVitorias - remocaoDerrotas;
         } else {
           lutador.lutador.score = -999.999; // -999 = inelegível. Tirar na hora do ranking
         }
