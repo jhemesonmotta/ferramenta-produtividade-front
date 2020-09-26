@@ -59,7 +59,7 @@ export class ScoreUpdateComponent implements OnInit {
   }
 
   private descobreAdversario(luta: Luta, lutador: Lutador) {
-    return luta.lutador_a.id === lutador.id ? luta.lutador_a : luta.lutador_b;
+    return luta.lutador_a.id === lutador.id ? luta.lutador_b : luta.lutador_a;
   }
 
   public calculaScore() {
@@ -112,6 +112,8 @@ export class ScoreUpdateComponent implements OnInit {
         } else {
           lutador.lutador.score = -999.999; // -999 = inelegível. Tirar na hora do ranking
         }
+      } else {
+        lutador.lutador.score = -999.999; // -999 = inelegível. Tirar na hora do ranking
       }
     });
 
