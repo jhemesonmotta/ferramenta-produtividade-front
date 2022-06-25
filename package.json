@@ -37,7 +37,7 @@
     "cypress": "^4.1.0",
     "lodash.get": "^4.4.2",
     "minimatch": "^3.0.4",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^2.6.7",
     "node-html-parser": "^1.2.20",
     "ora": "^4.0.4",
     "rxjs": "^6.5.4",
